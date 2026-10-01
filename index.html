@@ -1,0 +1,3092 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>NSSUスキー実習 代替学習プログラム</title>
+<meta name="description" content="日本体育大学 スキー実習 代替学習プログラム｜スキー・雪・冬の自然を学ぶ ○×チャレンジ">
+<style>
+/* Layout: スマホ1カラムのチャット型。上部固定ヘッダー＋本文＋下部固定の回答バー。PCでは中央 640px */
+:root{
+  --bg:#eef2f0; --surface:#ffffff; --surface-2:#f6f8f7; --line:#d5ddd9;
+  --ink:#17231e; --muted:#4f5f58;
+  --accent:#137049; --accent-ink:#ffffff; --accent-soft:#e3f2ea;
+  --brand:#023894; --brand-soft:#e8edf7;
+  --ok:#137049; --ok-soft:#e3f2ea;
+  --warn:#8a4b06; --warn-soft:#fdf1e1; --warn-line:#e9c48f;
+  --bubble-nav:#ffffff; --bubble-me:#cfe0fb;
+  --focus:#1d64d8;
+  --red:#d0021b;
+  --shadow:0 1px 2px rgba(20,40,30,.08),0 4px 16px rgba(20,40,30,.06);
+  --font:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI","Meiryo",system-ui,sans-serif;
+  --num:ui-monospace,"SF Mono","Roboto Mono",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#101614; --surface:#18211d; --surface-2:#1e2925; --line:#2f3d37;
+  --ink:#e7efea; --muted:#a9b8b1;
+  --accent:#3fbf85; --accent-ink:#06170f; --accent-soft:#183326;
+  --brand:#8fb0ee; --brand-soft:#1b2540;
+  --ok:#5fd39c; --ok-soft:#173326;
+  --warn:#f2b46a; --warn-soft:#33240f; --warn-line:#6b4a1d;
+  --bubble-nav:#1e2925; --bubble-me:#213a6b;
+  --focus:#8ab4ff; --red:#ff6b6b; --shadow:0 1px 2px rgba(0,0,0,.4); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101614; --surface:#18211d; --surface-2:#1e2925; --line:#2f3d37;
+  --ink:#e7efea; --muted:#a9b8b1;
+  --accent:#3fbf85; --accent-ink:#06170f; --accent-soft:#183326;
+  --brand:#8fb0ee; --brand-soft:#1b2540;
+  --ok:#5fd39c; --ok-soft:#173326;
+  --warn:#f2b46a; --warn-soft:#33240f; --warn-line:#6b4a1d;
+  --bubble-nav:#1e2925; --bubble-me:#213a6b;
+  --focus:#8ab4ff; --red:#ff6b6b; --shadow:0 1px 2px rgba(0,0,0,.4); color-scheme:dark}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:1.0625rem;line-height:1.8;margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+[tabindex="-1"]:focus{outline:none}
+h1,h2,h3{line-height:1.45;text-wrap:balance;margin:0}
+p{margin:0}
+.wrap{max-width:640px;margin:0 auto;padding-inline:16px}
+.stack{display:flex;flex-direction:column;gap:16px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:12px;min-height:56px;padding-block:6px}
+.logo{height:26px;width:auto;display:block;border-radius:2px}
+.top-title{font-size:.82rem;line-height:1.35;color:var(--muted);min-width:0}
+.top-title b{display:block;color:var(--ink);font-size:.92rem}
+.save{margin-left:auto;font-size:.75rem;line-height:1.3;color:var(--muted);text-align:right;flex-shrink:0;max-width:9.5em}
+.save.err{color:var(--warn);font-weight:700}
+
+main{padding-block:20px 32px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
+.muted{color:var(--muted)}
+.small{font-size:.9rem;line-height:1.7}
+.eyebrow{font-size:.78rem;letter-spacing:.08em;color:var(--accent);font-weight:700}
+
+/* hero */
+.hero{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.crest{width:72px;height:72px;background:#fff;border-radius:18px;display:grid;place-items:center;border:1px solid var(--line)}
+.crest img{width:54px;height:auto}
+.hero h1{font-size:1.45rem}
+.hero .sub{color:var(--muted);font-size:.95rem;margin-top:4px}
+.credit{font-size:.82rem;color:var(--muted)}
+.notice{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:.92rem;line-height:1.75}
+.notice strong{display:block;margin-bottom:4px}
+.warnbox{background:var(--warn-soft);border:1px solid var(--warn-line);color:var(--ink);border-radius:12px;padding:12px 16px;font-size:.92rem}
+.warnbox strong{color:var(--warn)}
+ul.plain{margin:0;padding-left:1.2em}
+ul.plain li+li{margin-top:4px}
+
+/* buttons */
+.btn{appearance:none;border:2px solid transparent;border-radius:14px;min-height:56px;padding:10px 18px;font:inherit;font-weight:700;font-size:1.02rem;line-height:1.4;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;width:100%}
+.btn-primary{background:var(--accent);color:var(--accent-ink)}
+.btn-secondary{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.btn-ghost{background:transparent;color:var(--accent);min-height:48px;border-color:transparent;text-decoration:underline;text-underline-offset:3px;width:auto;padding-inline:8px}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn-row{display:flex;flex-direction:column;gap:12px}
+.link-btn{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--accent);font-weight:700;font-size:.92rem}
+
+/* form */
+label.f{display:flex;flex-direction:column;gap:6px;font-weight:700}
+label.f span.h{font-weight:400;font-size:.85rem;color:var(--muted)}
+input[type=text],select{font:inherit;font-size:1.0625rem;min-height:52px;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);width:100%}
+.err-text{color:var(--warn);font-size:.9rem;font-weight:700}
+
+/* pattern cards */
+.pgrid{display:grid;gap:14px}
+.pcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.pcard-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.pcard h3{font-size:1.1rem}
+.pcard .theme{font-size:.88rem;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:2px 10px;font-size:.8rem;font-weight:700;white-space:nowrap;border:1.5px solid currentColor}
+.st-new{color:var(--muted)}
+.st-prog{color:var(--brand)}
+.st-retry{color:var(--warn);background:var(--warn-soft)}
+.st-pass{color:var(--ok);background:var(--ok-soft)}
+.meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 12px;font-size:.88rem;margin:0}
+.meta div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dashed var(--line);padding-block:2px}
+.meta dt{color:var(--muted)} .meta dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums}
+.progress-summary{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.dots{display:flex;gap:6px}
+.dot{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-size:.8rem;font-weight:700;border:1.5px solid var(--line);color:var(--muted)}
+.dot.pass{background:var(--ok);border-color:var(--ok);color:var(--accent-ink)}
+
+/* quiz */
+.qbar{background:var(--surface);border-bottom:1px solid var(--line)}
+.qbar .wrap{padding-block:8px 10px;display:flex;flex-direction:column;gap:6px}
+.qbar-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.qbar-row b{font-size:.95rem}
+.qnum{font-variant-numeric:tabular-nums;font-weight:700}
+.bar{height:8px;background:var(--surface-2);border:1px solid var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .3s}
+.qnote{font-size:.78rem;color:var(--muted);line-height:1.5}
+.chat{display:flex;flex-direction:column;gap:14px;padding-block:16px 8px}
+.msg{display:flex;gap:10px;align-items:flex-start;max-width:100%}
+.msg.me{justify-content:flex-end}
+.avatar{width:36px;height:36px;border-radius:50%;background:#fff;border:1px solid var(--line);display:grid;place-items:center;flex-shrink:0}
+.avatar img{width:26px}
+.bubble{background:var(--bubble-nav);border:1px solid var(--line);border-radius:4px 16px 16px 16px;padding:12px 14px;min-width:0;max-width:calc(100% - 46px);box-shadow:var(--shadow)}
+.me .bubble{background:var(--bubble-me);border-color:transparent;border-radius:16px 4px 16px 16px;max-width:85%;box-shadow:none}
+.who{font-size:.75rem;color:var(--muted);font-weight:700;margin-bottom:2px}
+.qtext{font-size:1.08rem;line-height:1.85;font-weight:500}
+.qlabel{display:inline-block;font-size:.78rem;font-weight:700;color:var(--brand);background:var(--brand-soft);border-radius:6px;padding:0 8px;margin-bottom:6px}
+.tools{display:flex;flex-direction:column;gap:6px;margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+details.hint summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700;color:var(--accent);font-size:.92rem}
+details.hint .hint-body{font-size:.9rem;line-height:1.7;padding-bottom:6px}
+.kw{display:inline-block;background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:0 8px;margin:2px 4px 2px 0}
+.srcs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.srcs a{font-weight:700;word-break:break-word}
+.srcs .pub{display:block;font-size:.8rem;color:var(--muted);line-height:1.5}
+.verdict{display:flex;align-items:center;gap:8px;font-weight:800;font-size:1.05rem}
+.verdict .ic{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:.9rem;flex-shrink:0}
+.v-ok{color:var(--ok)} .v-ok .ic{background:var(--ok);color:var(--accent-ink)}
+.v-ng{color:var(--warn)} .v-ng .ic{background:var(--warn);color:var(--surface)}
+.bubble.res-ng{background:var(--warn-soft);border-color:var(--warn-line)}
+.bubble.res-ok{background:var(--ok-soft);border-color:transparent}
+.point{margin-top:6px;font-size:.95rem}
+details.history{background:var(--surface);border:1px solid var(--line);border-radius:12px}
+details.history summary{cursor:pointer;padding:10px 14px;min-height:48px;display:flex;align-items:center;font-weight:700;font-size:.92rem;color:var(--muted)}
+.hist-list{list-style:none;margin:0;padding:0 14px 12px;display:flex;flex-direction:column;gap:8px}
+.hist-list li{font-size:.88rem;line-height:1.6;border-top:1px dashed var(--line);padding-top:8px}
+.hist-list .tag{font-weight:700}
+
+.dock{position:sticky;bottom:0;z-index:15;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.dock .wrap{padding-block:10px 12px;display:flex;flex-direction:column;gap:6px}
+.dock .lbl{font-size:.8rem;color:var(--muted);text-align:center;line-height:1.4}
+.ans{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ans .btn{min-height:64px;border:2px solid var(--brand);background:var(--surface);color:var(--ink);flex-direction:column;gap:0;font-size:1rem}
+.ans .btn .sym{font-size:1.6rem;line-height:1;color:var(--brand);font-weight:800}
+.ans .btn:active{transform:translateY(1px)}
+
+/* dialog */
+dialog{border:none;padding:0;background:var(--surface);color:var(--ink);width:min(640px,100%);max-height:88dvh;border-radius:18px;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+dialog::backdrop{background:rgba(10,20,15,.5)}
+@media (max-width:700px){dialog{margin:auto 0 0;max-width:100%;border-radius:18px 18px 0 0;max-height:90dvh}}
+.dlg{display:flex;flex-direction:column;max-height:inherit}
+.dlg-h{display:flex;align-items:center;gap:8px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.dlg-h h2{font-size:1.15rem;flex:1}
+.x{appearance:none;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);width:44px;height:44px;border-radius:12px;font-size:1.2rem;cursor:pointer;flex-shrink:0}
+.dlg-b{overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px;overscroll-behavior:contain}
+.dlg-f{padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0;font-size:.95rem}
+.kv dt{color:var(--muted)} .kv dd{margin:0;font-weight:700}
+.sec h3{font-size:.85rem;color:var(--muted);letter-spacing:.04em;margin-bottom:4px}
+.pointbox{background:var(--accent-soft);border-radius:10px;padding:10px 14px}
+
+/* result */
+.ng-red{color:var(--red)!important;font-weight:800}
+/* 情報入力ボックス・問題ボックスは常に白背景（ダークモードでも） */
+.paper{--surface:#ffffff;--surface-2:#f6f8f7;--line:#d5ddd9;--ink:#17231e;--muted:#4f5f58;--accent:#137049;--accent-ink:#ffffff;--brand:#023894;--brand-soft:#e8edf7;--warn:#8a4b06;--focus:#1d64d8;--bubble-nav:#ffffff;
+  background:#ffffff!important;color:var(--ink);color-scheme:light}
+.paper.paper-yellow{background:#fff8d6!important;--line:#ecdc9a}
+.result-head{text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center}
+.result-head h2{font-size:1.9rem}
+.result-head.pass h2{color:var(--ok)}
+.result-head.fail h2{color:var(--warn)}
+.score{font-size:2.6rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.2}
+.score small{font-size:1rem;color:var(--muted);font-weight:700}
+.review{display:flex;flex-direction:column;gap:12px;list-style:none;margin:0;padding:0}
+.review li{border:1px solid var(--warn-line);background:var(--surface);border-radius:12px;padding:14px}
+.review .qline{font-weight:700}
+footer.site{padding-block:24px calc(24px + env(safe-area-inset-bottom,0px));font-size:.8rem;color:var(--muted);text-align:center;line-height:1.7}
+footer.site img{height:20px;margin:0 auto 6px;display:block}
+
+@media (min-width:560px){.pgrid{grid-template-columns:1fr 1fr}.btn-row.h{flex-direction:row}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+
+<div id="live" class="sr" aria-live="polite" aria-atomic="true"></div>
+<header class="top">
+  <div class="wrap">
+    <img class="logo" alt="日本体育大学（NSSU）" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAB7CAIAAADWso0DAABEzElEQVR42u19d3xdV5XuWnufc25Rr1axim3Zcq+xE9uppCcEktCSQCDADDB5zAwzkxAYmEJ7TGZgGEqAMJShJYbkEVIc0qudOO5VkiVblixZvV5Jt5xz9l7vj33vtWzLtnTOubJ47y7yU+Ifvldnn733t9dae33fwuyrHoa0pS1taZuEIYJty9LCDC00ZqZfR9rSlrZJAgfZciRoaIxh+nWkLW1pmyRwCIaMIUu/i7SlLW1TtTRwpC1taUsDR9rSlrY0cKQtbWlLA0fa0pa2NHCkLW1pSwNH2tKWtrSlgSNtaUtbGjjSlra0pYEjbWlLWxo40pa2tKWBI21pS1vazmJa+hX8v2GIp/77DKPkDwCiP/sR0anDovQKSANH2s67oxARERAQAIhIEklJJAkIgCbaRqg+BoCICAwx/g2JXUlEREBAFwRTEJGNexg1HCEoPhY50TOdMiJk7JR3cnJERGlM+bMHDsaQofcsfiISklK0oLk72QG1B7zZWgwQUEqybQmWDbYACYAAGgON+wJawKf5dO73cUPjdCrQxExhWsIS0rRkzBSmaYMtwZYgJKi9xhloDDSmcaaUFqQCpNQtBkT1i4SUwhLCEmBLIAJE0DnoPBDQAj7N0FnQp3HG6FTQiMRsS0jLkqYtoqawYwKEBFuCTIxIY6Ax1BjnjCESEEmY/IDcT70yIVPyEjlDdL2V3DzbNAIHoh2xwBQpQD/Ggrr33iqCMIWIWq6+ROcsoDl+NrW7JJFtChG1QRL4eE5eoLosu2Z2zrzynHmzc8qLMmblB3OzfFkBPRjQdI2fueKFJCFk1BRRU4Sj9ljEGhqN9Q5GegcjHX1j7T2jrV0j7T2jnX3hsVA0PkcGR0PTNAZAUnp2cKvDwxbSjtkQswEAAvqswmB1Wc78ipz5s3MqS7PLizKK8wI5mUZmQA/4NF1jZ24SW0ghKGLa0ZgYi1qjYWtwJNY7GOkeCJ/ojY/oRM9o90DEHI2BJYAxMDgzuMYZKQftPFNvi6jtwYCDOtOYx4sTwRo1QUi33xPQme7w2aYJODhDe8z84M2Lbt5YZdnSK/UgKUnX2NZ9nT/5/X4tqEvv/A7GUIStdavK7n3fMls4eWD1bG/u7fjZYwf4FJ8NARhHIrCjNkRtMHh5Wfa6xcUbVpSuXTyrtiqvpCA4NfgCAOAZAf0cf8eyZfdA+Gj78P6m/l2He3Y19Da2DppDEWAIAV3XuXCxUhGBM2ZLaYdNMCVk6LVz89ctmbVxRenq2qKa2bl52b6pjUhjAJAZPNeIwlG7o2/sSNvQnsO9uxt69xzuPXpi2AzFQGcsoHOOQtDZpn79mvJP37bU2dQnHWGNs3/71e6Gpj7u07xyPBBRmPZ9n1y7rKbA8VZSi/MnTxx6a2c7d7Rxps/jIKLP3L7kqjWzPf/mq9dW/M8z9bYgRM+QnSHaMfs9l8352M0L3XzPsY4QxWyWYcjJPRoiMMZsW4rhGHCcP7fg5suqb9pQtW5JSU6mcZoTodwAjP9PZRHxPJNwMp847g8AjKGusdnFmbOLM69YXa7mq/H48Jt7Tjz1xrHXdp8Y6RvDTMOBe6x8ftO0RTgGAX3tirL3Xj7n+kuqViwoVJs/+WRSxtMzcS88nq6Y1IgoscYSyIuMYdCv1czOqZmdc8P6KgCImeLg0f4X32l7ZuuxbQe6rGGTZRlnToua+ve/q8bl1Cv7yk+3e+htIICUMhDQH/jYmsIcv8tv+9lTdSTJGS5OB3AggmXLYF6wZnauLaQKY73DIygtCK5aWPzOrnY9w/Aq2UFEoPPl8wuUS8w5OngwxvCVne2g80k6+pwzyxYiFPHn+G+5eeFH373o6rWzAz5tPFIk84ic4fk21YRTcdqHcPwDq+QoESEg51hblVtblfsXty453jXyyHOHv/azHVFLTv53Ki/DjFkibBeXZ3/oA8s/ctPCdUtmncQ+QQSUzNRy7n5EeNoUqNQGASGiz+BrFhWvWVT8hXvW7Dnc+4Pf7//FU4eYrp02O5II/Nqq2kJbSCGJOz3SGcP9Tf3H2kPM4J65GwwpbNfMK8jNNGynDiARIGLvYHhvUx84dYWmBzgQTLtmfmF5cYbnyVHlTF53ccU721oREcCTTCTYQvqzfcvmFWicMaSpOoQKHENj5uHjQ2Dw86IZY0gE1nAkIzdw94dX/fUdKxbPyU8OEBGZQ6SY2qgTlxIYd0kkKbemsiTrrhtq//Un29X/T5MCQbRsKUKR2ZW5935g+Sfeu3hWfvDklCEioiOkmPqIeGJEFL+BIoJVtUXXXFLx89/t4z7dHhewIIJtidyCoJp6zhwecjZIjbMDR/spbOq5Adt9PiLhDYElVtUWaZw5O8/UCcQZNh4fDg1GuF+nGQsc8dEuKGSIjkd7LlQCuGF91dcefkdI6dV3kmlXVeXNLs5UMD/lA4eIIza0Dnb3jnGdnXtuNM7MsAkEd713yT/9xbqF1XlqdtWr0/iFKdJDAGTIAG0hJdHPn66PDUWM/OD59wACZ8wKRTNy/H/3vzb83YdX5mf7lX+BCIxduBEhICIDlJKI6OdP1QPD0+6uGaIwxaKqvMLcgHvXeEd9t/c5e4JLlsxKxGdOno+IAHD34R6ICR40bDFTgUONdt1iV6M9FyoBrK4tmlOVe6x1SPMiC4UIYImlc/I1zpw5q2pu9h7ug4jFfWc/cJQzPxRZsKDwv+674sYNVfENxoDPGPV59STPvt0KxvljLsaQJFmDkeuvmvuf/3C58ptsITlDbw8MxyaJGMMTvaNvH+jCwOl5QUQES160qBgAhJSOMY4zBgC7G3rhfMfGVJ0FCGirFxYnj0xHRwICwI76HjcbcTqAQ0iJrkd7jk0uhPQb/Ko1s4819rGALoVr4AAESasXFiUhwNn3bK/rPrdfg0DWUOQjty39/gNX5Gb64pDBZ1DDChWr1x0b2FPXwwL6uVNIjKFtCkb0zfsv/8I9FyUgg10oF+NsI0KOz29rG+sb03MDp10VEQAwuGRpCZw/L3uuYwMR+4ejDa0qUCXPlrolioszF1XnJY9MJ6DGUUja39Tn5tlSPqOIKCxZWJSx0N1oz+nNAADctKEKGHqC7pIIdL5GIZ2j1cM5I4I9jb2gswnnBhFBkh2xHnzgyl9/7TqFGpynpEDO7asAeGZLiz0SO/f+55zZUTsvw3jm+7d+4Z6LpCQpSeMzbUCgakKeeO0onJERQwBbSD3Lt6q2CAAc+3wKXQ81Dwz2j2ka96wEBhFMsXROfnaGIYmcvVg1oe3do80nQjjptP0FAA6GAKZYVJWXm2mQ09Gezz1mAHD5yrLc4kzLki5/hWpyF8zxKzfbQecZIkKAroFwU9swnJG0j/sakoRp/+LrN3z+7tVCEBHNKEfjtDjlyTeOndvlZgytsDUrP/jyT9534/pKVV8wA3t9ERFj2D0QfnNvBwYniFPIFBWl2fPKs914x+pF7T7cCzHh4UtARLDl2sXFym9y+GwSAOBgc39kOKppzDGoTYfHAbZYEw8aKUXYJCUV5QXWLyuBqOVyqhARLDGnLLusKMOZi5Q4cPpHBiOafvrcIAADsKP2L79+/T03L7RsyTkizkTUkJIQsbFtaGdd95npgPGoIWKiMNf/wo9uW7Wg0BZyfIHGjDIhiQBeeKdtuHtU00/3BZABmGLl/EJD50I6P+SUl7q9rtvbKyMiAo4qV4iOwyggANhZ3wO2cLPqUj7BBACMqdGm2qO+cX0VCIngEjgALLF0XgFn6Azp1IGzs74HTPtM3GGcWaHog/dd/tGbFlr2zN1jybe6eUuLORTROaOzvS5BGoPHv/3u5TUFtpAzKqMxUV4J/vh6MyCcWS2IgCDlxerOwulZTIkkwj53SYQzng1sQb4c/8oFhQDOr3vUgtzZ0AOcuSEVp3yObSG1LGPF/MIUJTjGv45r1lVo2X7blu5mCEGCyqs7Wz0KyHfW9wA7fW44Z9ZQ5I7blnz+I6ssMaNR45Q4RTtrMMwY2qOx//z8lVesKrPsGY0aRMAZ9g9HX911AiZK9ApJ4NPiR7q7OKVNJREMTh6Wfpn23LLsypIs9dqdvQHGMGaKg0cHQOfkYqOkdpqZChpLsue6CxonkeZAIqityl02v1DGbDfRiiQCg6v0mIMHJgDO0LLl/qZ+ME6ZG4YoolZFdd6PPn+lJOIzu923JELEls7QOwe7MDDxJTfnzBqO3XJj7Wffv8ye8TgopCSAl7a3DXaP6GfGKQjCljn5wSVz88FFZlTN+IGjfdHhqMaZt5nRFQsKVYmAG1A7emK4vWuEuQO11M40MgRTLJ9X4NO5lJTSQF5IyRCvu7hiwgBh8nGKbcvMXL+68XLwNSQJAFo6Qy2dIdRP9VQRpSm+8w+X52b5SKbK/4orcsT/oYQsxcQyHedOcADA5q2t0cGIPtHVACJIS2TlB77395cRpdCdPMeIHMQpT7zeDJLOPBJUffPi6ryiPFX65SqJsKOuB2zp8UlJcMmSEjdhlAKcfU199miMc3SDaSkGDgCQiTxwihVVkiWk4NMcQzIiginmlWeXFjjOjBIA7Gvqt069v+QM7dHoZRur33fVPCG9vEORREKQIlZIorjADSb1fvDkH9VflmQLqf7+uS5KMBGnnOWSmzMmRmN/fdfK6tJsIT1jPCu227gnhHOMSAGcGr4t5Dno/ypOGRyJvbKzHQL6mUXG7NTSL5dR8876HuDocemXX1OXDC7wKJF9k+QyFZjaAjBVEKEmAyG1nrmasHWLZ82endPeEeKG5mDaVHX8sppCRHBTHb+zvhvEKRfDBADI/unjFyX+4H6DkZCkVGqSdAz13Uq2hwgiMVtK8vs0jaOuMb+hMTzJRknuKCGlopMmH1iVV7Z1j761r2PC+xREsEy7oCzncx9cofakB6tFkiRV+oFs3BMKSTFLWLaUkqIxGxH9Ps4ZGjr36TwBWHja9yiCT3JEQkrO2Wu7TvR2hPQs/8TQwDBR+uUc9RjDSMw+2DwAhmcVHIggbFFQGFwyJ89NGKXe1e7DvedIWl144Ii7/XmBZfMKAIClOP5FBCEp6NeuXFX+m+YB7tedFeEDUTwz6qg6Xs3Nzvpe0E4WPnCG1pi5ZmXZNWsrpBclG6oQXuMIAEfahvc29e4/0n+0bbi9d3RwJDYStsJRW0qybCEJdI1xhkG/lhU08rJ8JQXBOWXZCypzaytzF1TlFecFkp5RkiCTKK88PtYfNibiaHHGxFj0w3euLMoLuOcfEYCUxBkyQNOSh5r79zb2Hjo2eLR9uGcgPDhqjkasaMyWRJYlAcHQGOcsM6BnBfX8HP/swsw55dm1Vbm1lbnzZufkZPqSuKMogkovS9V94VlCZtuWPNNQdxYMXdWMNrUNn+gaYbpnVypxBk11fl62XxI5ezwiYoihMbO+ZXAyxMsLCBwIpl2zoLC0MOgmaJxi7gdv2lj1mz8cdPZaJBH4tMSNlyMqPeJI2Ko7NgCGlpwbxYC45+aFypFh7raZ2mN9w9FfPVP/2EtNe5v6o6EoCAkMgTHgCIjxU0n5F5TQIpUEgkBKkASI4NPy8wKLqvM2LC+9ck35JctKFBtN/QqNwxOvHz1bnCKk5BnGPTcvJNfcI8Ul4wwPNQ/84qm6zVtaGtqGYMxUxzdwBIbAEpEJw6SUSLckkARSglInZQwCWllhxrKago0ryt510eyLFhf7dB6fVoKRsPnijnaa6D6FIdqmPbcqr2Z2jptYQBIxwH1NfTJs6jkBITxjXYIlkqVfztaPes+HW4cmQ7y8kMCh3P6VC4oQUQjJU39Rp077K1aXZxYGx8KWEtGamotkyey8wMIqp5lRIkRsPD7Y1TvKEnODAJYtAgWBWy6dA67vpBV55BfP1H/p+291tg+BzsGv6Vk+tdbjSQs6RdMcxqn8JH4qsU8aCEW37mzf+vbx/9BZSUnW1WsrPnTt/GsvqfAbWv9wdMueDgzoZx6bnKEVNlctK1W37G7iFPXGTEt+6Ydv/WDTvmgoCn6dGVzLDcTHocZyzhHFxw4kBHX0jnW0Dz//8pF/DugLqvJu3lj9gWvnr19WAhze2NPR1T6kZfomiLwYgilWLoiXfrmMvLYf6gbpZWROQO6LoRSo7WnsPQ/xcibkOIBgXZwCPB2mfOyywoyLl8x6+c1jLNMnpoIciAiWXTM7tzgv6OyaQM3N3sY+CltJFQbGUIxaq5eXVpVmqZJnlxHKlx/e9o3vboUMw8gPKnFzIel873i83NfJ/+IaYzpHREnU1R/+7R8P/vapugVz8++9Y4VpidBARMs0JkpwIJji2nUVSj3Uce2GuhmJmvat929+4fkmlh8w8oIqQzGJZT1+RCefkOucGRwRhaTGlsHGht7vPLLnkqUlf/vhVc9saUE5saKIyuJfvDRZ+uWUP6ZIsYd7PCTFIoBtk5blW+UujFIf21HX48lTpRA4hJQY1NcsdFgQ4QZWb1xf9fKrzVPV9Um4SCoz6txF2n6o+/RtZsvLV5apna85jVNUKuEPrzV/43tvGXkBCeCy1C2eGaU46HCdM59GRI2tg5/7+isQ0M6mRimJQONXri53mfNWxSxfeOjtF55r9JdkWbZwL3hDRCKBKJpPU4zebXs6tu3tQL+GmcaEaVFJBIZ2kTsCt4oF+kOek2KRTLt6Tv7ccldhFGOMAPY29oLmwbOlCjgQUViiuDCjtjJVpNizbn6Aay+u5E611RTSOXuv6sDZ09gH2klSrKIYrHVHMVDZZVvIr/5sOxqMENyrB0yw5QQBgBbQMQhnu9qMkwDzAkvnFYAjEuD4TE3zidCP/88BrSBo2cLz+3pJpN6SnmnA2alSKkTNLQguqylws1aVelNd88BA35hjZa0JHo8hmGJFTYGuMcdhlAoJuwfCjW1D4EU9K0vZBgYwxeLqvJxM5xRgZ2+ZCJbMzV80r2CqJaSq4ljF7Y4yo4QI3QPhw8cHx8+NkMQzjAWVueCCYhDnmx0fOtjUjwFdiBQGf6oy4mxLCwHBEpXFmWWFQTdQqID1hXeOm8NR5l2F5dlm9hylPQwRTHtRdV6RO9Wv8aRYD8uCVZMblwwaNfq6Y4OhiYiXMwg4xpNipZy+ZlqoEv4Mr1lXAbEplJCqq/K8/GDCRXI8NwOhwUiSeYkI0pb5OX7FtXWxKAEAjrQPi4jFLyiVFhmALStKMjln7quBG48PXfDCe3XntcZ16VciidDt7a6SRODjFy12GUYRAOxu6JnSprgAwEEAwFNOij3rOgC4cX0lTOUiXXEBFlTmFub6nV0eJ0ixvRAT7GTjUwQh83P8ORkGuEEOAAAwLYEXuqWhkkcrK8yEs/RmnJLFbHnBWzQq1a+Ll7hdqwpJ9zX1g+6l6pdtydz8oAoMHfsxaj3vqO8BRE867aYKOGxbapm+FfNdBY1u0hzrl5WUlOfY5mRFB9Sxoyo4nB07CVJs9/jpVX5mfpZP0fDQxX4FgOrSbDI0CRd8q1Fhrj+56dzYnNKsC9sCGwGEkFqmb3VtscsEBwC09YwebR/2khSLCKZdW5WbCKMcJTgAOEMh5P4jfV7Vs7IUbV2yRFVp1pyybHCkEu4SpIWkrKBx+cpSiFpTiDYRVtcWOT9wGFq23NfUf7pcIJFqoeZmMXGGRLC8pmDhvHwZti4ws5YgK2i4XSQMAeDdl1ZrWT4p5YUKvxBRmqKyzLXqlyLFHumPeE6KteRFi2a5CaMU8fJ4XC5QIzlTPQ6lpLSspiCupOQIvPc19f3x9WZwpBum6qBu2lA9+RNRSAl+55lR9czHu0eOdYbQ4JQCB1ySNHT+jc9cQqbAabzhPhs6u98SQtLCqry/+uAKuz+sa/yCpWxMsaKm0Ge4Uv1KKGt1e02KJWBwsbuQX6HYwaMDsVCUa+jJ0kwNcACClPF+CFPHXgWsexv7fv50vTN/mDFEgKvWlAfyg5YlcBLbQNiysCBD3X04yYxKAoD9Tf2mOnC83mag6CGSbr9q3j//3aXmYIQkXUDVHE92hirY+4/PbrjhhtpozyjnF0CmVKVsXN5ZJGOcHYoU613Boy2IZxirat0xaBTTv74bbPIqb5CSlRcvp3FOASYAaDw++MqOtkjM5oyRgxVJVFmSddGiYoqe/1JWZUYXVuXmZfnc0Gp21veAOPPAwZgpwAsfQakZfuUv1j30tev8DMzhKGN4AcIWhIjpQSd3RZP3GfzJb7/70x9bY42YdsTSOJtO+FC6TeuWuC39OoUU61EWiiFKU1SUZtdU5Lp5PAUWuxq8ZPp7DxxJUuzSuQXODlv1gupbBsc6Qu8c7AZHF7rqIzesr5yM65jIjBY5jiTHqTCcUmtMAMCxdyiqaGXuJ01hx73vW/b2r+646V3z7DHTGjURkU9nIwLErv6wJ54HIhCBobEff/GqJ7//3mXzC82hiB2xOJ8OQEyWfqm1ytxVcBxpH273lBSr5G+XzyvwG851sBKgJg55yvRPBXAgmGLB7JySAieMj6T0Xv2xQQR4ekuLMx9S/d7rLq5iQX1SWICgOjA5npuxiHXo2MBphGUiAo11D4QHQtGT4aZ77BC0vKZg83ff8+wPb7t2Y7WI2dZQRAiahuOaiICzls4R8EgqQeGpkPSey+ds//UdP/7KtYtrCq1QzBqNAYCS50jRWFTp18Iqt6pfCin2NvbJMdNDiSZ1l792ySxwoYOl9k7zieH27lEvmf4pmQxLrKotUrcbUx6nJABo7Rxp6QxRpu/5bcdtITmfcrSirnJWzC+YPydfRM9T9CKkxIC+vKYAwHkFR2PbcGf3KDu1yQ0RcI0NDEaaTwyDF4UPcezgqMhgN26oeuGHt2752fs/+r5lOQHdHIzYEYuxFDogRAA6a2obCkdtht6UlWDCk/Ib/NPvW7b7t3f87tvvvubSOSDJHAoLS6TIAUGPVL+U7ahTpFgvtd1A19a5K/2Kg1pTnxiNad6BWqqya4nSL3KyLgEONfdHQ1E9w2ho7j94dACnHq3Eu3Jp7OqLZsM5a88ZgrDkrKKM+RW54EIucG9jrwybZyYsOWMQtrYd7CZ36bfTH5uhupggoo0ry375lWv3PXrXgw9cuWJRsR22rOFUOSCSiOm8o3Ok7tgAeDoideUsBPl0/sFr57/40K07f/Whv//kuopZmdbweAfESxgEBooU6+7JGQDs8rRTbDzkz/cvc1f6NQ7UvGzb7D1wqNNbuf3MiUp4ouDfljpHMWr+6e1WZwtU/e4bN1SdWyhN1dgsrM7LznDVa25H3cStyRXJbfPWFnSqan/uzaYo5EJSVWnW5z+6evev73jxx7d/5Nal2UHdHIzYUe/zBRpnMmy+8M5x8FpKFhE4j8MHEa2qLfr23112YNOHf/3gTddeNgeJzKGIsKWmBBNduzm2IC3Tt7rW4VpNzi8iDISiDa2DntaMIph2bUVeSWEGufA41NTv8UIuMIXAoTrFFhdlOOZ0JTLAvcCZJACN/emtVnCkFqNaQ25cUVpYmmWZ4mwPo2jvicwoOZobFge7iQ4cKQmD+hu72ptPDCNgKpg7nCFnqGQsGMNrLq749deu2//oXd+8/4qFcwusUMwaMz3syahuzTa9dMS95s054AMRpSQhZE6m8ZGbal/4wa07f/mhv7nnouLcgDkUsWM2dwcfGL+zyJqnVL+Y41gAAKDu2OBAf5jr3NvSr9ULi1Rtq+O4EhGHR2P1rR7IBaYQOOKk2JN9caecGVUNYw4dGwCd20JiQNtZ39PaFVJiM1Ndf0JSXpZv4/JSOPelLMPVtYUu5gZ6hyKHj0+swkAAusajg9EfP3EIMYVq7wxRlZDEHZCSrC/cs2bPb+985D9uvvSi2faYaY+Z3IuzWkrSgvqBA13PbzuOiHbKqLoqWaMcEEm0srbou/ddvn/TXf/+wJU1lbnWUMQ2bcfBCzIA0145v9DnqEzxtAzX7sM9ELU9h1GXDBq12Bpahvq8kAtMrccBtlSCKNJpZvRYZ6i9e0TVX+oajwyEX9zeTs6+kAgAbt5QBXRWPXhbSBY0ltc4rLFRc1PXPDDUH9bOcuAIKVmm8ZPHD7R1j3LGUkoXxlMdEL/B77x+wZs/ff+T33vvxjWzreGobdruZRyVbN9XfrpdNWRIKdtEOSAs7oDQrPzg/Xev3vvInQ/9yzVzy3PMwYgztWSvSr/ipNhDPd7K+NtCYtBwHPKPX/97GnspYnNP5cI9Bo5EX9xiN+M8eLTfHjW1ZN0X4rNbW50VWas3/q61s325AcsWE/urligrzpzvtMZGPfOuhlNIsWd6JVznw/1jf//dLSl1OiZwQOL5AnjP5XO2/Oz9v3rwxnnlOdZgmCG6FDHUM33bt7c99PgBztEW08G8Yww5RyKyhcwI6Pd+YPnu3975lc9dmmloVig21YskFXCpy043N76KFLu3qc/bBIe0RHlJphJ5cHkhvaO+x/PeJB4Dhy1Iz/I57hSr3vruw33JpiRCSghob+ztGAzFVNZ9qkuNCOaV56ysLaKJPEkVWy2szgv6NWeCQwnCcjcgnKPWWAipZwcef7r+v5+s0ziz7GniuCbyBaCaG91908Kdv7njr++5yI5adky4cT2klDzT+MJ3tuxt6tM5mx7sUC9cAaItZE6m8c9/uW77rz90/RVzraEI0GTTz6r0Kyc/sHSOqzsLhRTtPaNHTwyjz7PsI2MAplg6t8Dxskxm3+Jygd6BmvfAkSDFZleXOSQaKqzZ09ibrL8kAk3n/V2hN/d2qMU69bNRAsANl1SCJSdu/CekkoGVDjOjKATtU51i6dyLTGoZxme/8coru9p1bfqwI/mciGALys3yfe/+K5767ntLCwKntZubcnKHs3DUet99mzv7wxpntphGxSaEJHwsqs577vvvffCBK8GWtikm0z0gofqVX5zvruEjAQAcODoQGYpy70ixCAgiXmAiXXSKRYTu/nBT2zAYXl6peA0cqlNsQhxxqnOh6i+jMbv+2ACMSxYwRBS0eWuL87QLwPWXVKJ/gtaQBAQMlRaDg9IdGScsjzR3DJ+XFEsEwNEmuvVzT7+2+4SuMduW0yxGoXFUm+2Wy6q3/uKDa5aXmMMRzWmzaClJDxrNLYM3/K8/dvSFtemKWU6DDylJSvr83auffejWgiyfHbHPm/LwqvQrod7UDbbwsMJEFRyvWVQ0LoviwBsCADjUPDAyGNE0j8UZva7jkFIlOBzAm/rIsc6RE92j41tpS0nk017a2R6zhANQV9O5urZoTnWeOFU3DQGEIC3Tt3y+Q1pN4sDpjw3HtEmUt0pJzOAjUfvmzz75uxebNI05q691v9lsIeeUZb/y49svu6TKHIo6xg4hpJ7l21/fc9VfPr7/SL/GmRBymuFQ3TRbtrxuXcVLD98+Kz9gRexz+x2qY5370q84KbauBzjzihSLCLaQRpbfZQvERPatB0zheR2xl8CRIMU6zDbJZGZ0zOTspGqAJOI+7VjL4K76Hph6xZHqdeAz+LvWlJ9WQqpu8stnZToWnqdkF197slJjUpJm8IiQd9y/+Ys/eMsSkjO0p32zaZwJSdkZxubvvmfdmnIzFHOc71DY0dgyeNknHvvVsw3qxtcW0+1MKQ9u5fzC5394W362T8bONSNCSJ5hrFrg8s4CGMOoKQ4294PuGSkWAcmUc8qyq0qy3GRGMQlqKai18Qw4VLYpKy+wZG6+m2zT7sO9ZzLTOUOKWs++5bCEVNmNG6pPa2iIDMASi6rzHbMPx6kwTOGSXEpinGlB499+tO3STzy+dX+nlths07nbFD0kK6g/8a2by8uzRdRyfM8ihNSCeihqf+wLf7rrS8+3do2o8opphg9NY5aQK+YXbnrwJpCEMHF1BourfmXVVLjqVJIgxQ61d40wDxupMADLXjovX4E7OgW1uCTdkT4wuOcVAB4CB4IlFlTkznKabWLJ2tgzvD7V9f65bceJwMF1tCohvXxlae6sTMs6qVKnUlCraovAUem0OnDCUfvQ0SkTlolIEhl5ge37Oi7/i8f/6puvtnSEFHwIQdOmC6+cnbLCjP/5yrUkXfnaUhLXmJ7le/TJQ2s+/OiDv9o1GraS8DFt+KFzZtny2nUV//RX6+3hKJvIjVKqX8trEqVf7q5U9jX2izHTww6nCAgS4p3PHZNigQDgWEeo5UQIdY8zo14Ch9LCWVVbiIgOsk2KgB+J2fFW2vKMIzqg72/sPdw6iDh1whuClFSYG1i/tASiVtI1VQzxNc7Z9HEVhhM9DlUYbCG1DAM4+/Fv96z68KP3/deWls6QEsKSdK7mJt7GLLaQ16yt+NSHVtjDUTcbgIiEJD030D8S+8K/v77yrke+t2nf8KgZB0RJ0+N/aJwJQV++Z83K1eXWmHnmHbxSqIt33nL9RNvrusFF4elZQn7usq2c2iO7G3qtkZjmkVxgypKj6LxC9qQUSvcImwggNc6s4dgL29uceQfqIzdtqAIRL4SP02ezfMvnOZRiP0mKHTMdE5bVBOu5gaGw9e3/fmflnY9++n+/srOumyHG6y+ETLUDonDqK3+5Lq8kU5yd1DP5sIVr3MgNHG0b/tuvv7zyzke+9tPtLR0hVc+qXntKAQQRAEHT2IOf3TAhMKg7i7i+rIvSqDhHqaEHdO4lKdYS2fmBRFs5V9/21oFOkIQwg3McqlPsKqdEQ7WSDhztl2fx+pIcU2ffrz5yzboKPcdnCamwnCxZUZJVWZoFLjhOO+p6QIJLwrIQknM08oLDEesnj+y9+J7fX//ZJze90DgatjhnjCGl0gFR1dyz8oN/cdtSORZzX5usijs1n6bnBlo6Q//8nTdX3PXo3f/8wsvb2yTRNDggnKGUdN3FlRsvrrRPdToUKVbP9MWLMp3fWQAiDIRi9fFOsV567gur8mblB90UmKhJfOdQ9+ma+zMKOBQptqQoM0GKdTja3Q29ICfegpIIAvrbB7q6+sOMoXRUQrqgMnfZ/EKKWoyhyowumZPn07l05GqemxTrYCHaCj5yA8DZC28233nf5mV3PnL/d7fsPdyLCQckRce1kuT51HuX+HIDti08OaEkkRBSMzQjLxiKWL954uA1n/nD2rt/9+3f7mnpHBnvgKQCEdVb+sxtS0Cc0tYREckWswqCs2dlgusWlg0tA/19Y1zztJGKJdctcdUPQRWbdvSN1R0bQJ9GMxY4GAKY9uI5eVlBh51iVWZ0b2Pv2fRUiUDX2Ujv2Gu7TpDTElKGeN3FlepaGwFBkLqQc5QZJUToH442eEpYVvABAHqmT8/2tZwY/tZPtl/00d9d/VdP/M8z9UMjseRx7XEFMUMiqqnIuXRVuYxYHuqGKK4d56jnBHhA332o+77//eryOx+580vPPf92q5CkxAE996cUrN+0oaqgLMsy7ZMZcQSwZUVxZoZfcyO/cpKj5CkpVlUkblhW6upLZNwXHu33vvTLY48DbFIVHI44rMAQxyJWwzm9PgREome2tDgjvKmP3HBJJfg0KSlRnOe0ZpQAAOpbBgb6w5rmfdZaSBKCNEMz8gLE8JW3Wj/+xeeW3/nIF3/w1pG2Ia7kvzzdbOrcn6S8s4MpFkKSJC2oG3mBkYi16am6G+59Ys1HNn1v077+4WgioePZeFRlXX62/7IVZTAOChWBW7UKc6MWqNbMjjov+WMIYNvSn+u/ZOkscN0P4Y09JybS3J9JwKESEGsXO9yEavkfPRHq7BllZ88zCUnk117bc2I0YjkhvCECwNrFsyoqcm3TFpJ82b64FDsDZ8+8u6EXJtF+weVxDQB6pqHn+Nq6R//tR2+vuuvRT37t5YbWQbXZvEqdIiICbFxeCn7dvQDnWUckTzogWtDY19Dzt19/ecUdv/3qf7/TH4opLVXyzH0jArh0ZenpCUKiypKs5AZz6NFwlJL2NXnJH0OGFLOXzC2oLs0mcq4Xp7ytLfs6wVMNDo+BQ4WpRoIUi076vBMAHDjSN6Fm5/h1oPm0E+3D2w50gbMSUklBv3bl6jKICSlkZUlWZUmms6SMWojb63pgWpoSKAeE69zIC45a4ue/23fRhzf940Nvh2M2Y+hJ0bpapQsqc/MLgsJObU9G5YBISVpAN3IDJ/rC//JfW1fd+cgvnq5jDL1SHkBABFg5vwgM7RR4Rayclek+gdLRN3bE006xKjN65epyRLcJjtaukQNH+tCvpehKjnkDk6aoTlbIOoXJ3Yd7z6sCrt7sZqclpJS8lOUIplgy13lxHuMoJO1r6gODT1t1k7qt4AyN3EDYFt986K2NH3/sQHM/9wI7FHrmZ/vLizImZBKn0AHRuZEfaOse+cQXnvvAA88Oj5ls6oJvE61MAIDqsiw9wxCJ9rREBAxn5QfdZEYpHqgOhkNR7l0SQZE2rl9fCa4rOLbs7YgMRnSNp2hpegEcCGDJ5fML46RYR5k5ANjb2AfaeTwrSQQ+/sI7x20hHfDBVRLritWzc4syIWarGhtyVBWCSoWhfTgVZXmTSaAyhr6C4N667is+8fjbB7vUBaT7hYsIJQUZICRO64jItqVmaEZ+4PGn69/16T/0DUUQ3GKHGkJ+tj830yAR1/gmAtB5QY7/5N9wmhk91DwApvSKP4aIdswun52zflkJuNC1Vo/z/DvHU6rL5kmogu5IscAQR8NWQiT6PGjK/FrD0YEDR/ph6trCSv+2tCC4bnEx2HLt4lkOkzISAODg0f7IcDRFWevJvDfLlkaWbzAUvf0fNp/oHXXv4atP52X5wEsl/akkdGzpK8zYvfvEHf/0giT3dFMEgKBfy84wksWdkgg0zM3ygeshHm4d9HD4nCFG7RsuqcwM6EK4oaiwcNR+bXcHTKQjMYOAQxKBT1vjtEI2kRkd7uodY5M4vTXG5FjsuW3HHTsLAHDt2grI8Ck+npPMqOriWzcFUmyKzLalL9PX1Tb0jz/chq7bI6n3GfDxFJUbTsYsS/gKMl5+6cgvNzcw5k7gAwEANM50jQERxEMV0DSeGdDdh3WtXSMetpiWRKSxD1xdE19iLpIv2+u629qGNENLnS/sWrQWwbZkdl5gqVNS7Pj2eZOJPogINK6Ysg7cOeVYXraqbP78gtKCILioQ93Z4KUKg3PssATL9j3+ypH2nlHOPOgqjHCBTUqJfu1HfzggyeP2C4hARD6dGzp3M1T1uXDUBo+UmhmiiNo18wuvXFPujMk5HvqffvPYuZuQzQTgQDBFbWVukbsK2V0NPZOcAEmEAW1XXU9r54iqlXaQT1lYlfexmxYy5uSIjnfxNe2DR/s9bE3u3E0A4BoPD0a21/UAeCALZAl5YcFDEpHBDzUPdPSOoessKdHpERznzBMyq4c7kzGkqHXPTQt9OhfS4fsnAI0z05LPbG2BlN2neAMcijW9qrYInVbIKnDd13T+zGhyHWgajwyGX9rRRk47ieVkGn9/10pwqPpFANDcHmrvGmXTnhk92wGIkjp6xzw4BgBCYxYgXkBPigg4x0jE6uoPg5tG3QQAEDXtcMQGhkAAgEDk05lPZ258K/VEhTl+kB54aHFiW3HWx29Z5AaPFFJsr+tuPNLPfXpKL/u8KQBLdIp1sgkRITRmJroZTXKfECA6LiFVFvBpbsLIvY29YizmoBt26szQvDgGAAZHYoltBhcQOwBR11xtb7XBxyJWaMwEdhIKlUap+2RQzewcFNJ9MohzJkdjH3/PorLCDCGIuSiDB4BNLzZCTHCWWqfR7VKzhStSrMLEprahnr4xNukqNyEJAtqb+zoHQlHHUb1LOFakWJwZkCGJiDNVDemmNgERLFt294/BBboqSp7AUlBOplFaGHTmFY6f4t6hyGjEYpwBAQABYswSMUuAi+yEesnrlswinUl3EIsIIiZyS7Ie+OgaInLD1uWcjYatJ14/BkEt1UK2zN2YUVqipNg5KVad3vuP9FPY0iadEBrXM6HTcVTvolcFAsCuwz2TjK2mYZsJW+YUZsS7fjFXDnjfUKRrIALahUz6MkSM2ctrCorzgg4aiZ4GHK2dIzJsKRVblYaLmSJmCnCBHOolX76qLH9WlksFE86ZGI39y6cuLi0ICumcn6ISBZvfauloGdR9eqpXJnM3wQCWWDo3PzOgu2kbM/nM6Clry6ZnnfZMcOOjIuLgSKyhZehsNaOIyNn0XdJqnNFI7P1XzyvOC7gTwgMAaD4RGhk+vUUIY5hq1/e0bUmW+NRtS8EdD01h36HmgfG35gzBMsVAKOYWrKXMz/bffsVcGrMcp1o1jZlD0csvn/PXH1jusoO3wrL/frIO0LU7PQ0eh5tOscnTe19T/1RPbymJ/NqLO9qiptCmMdGQIMUO9vWrLr4TeLHCtK2RmATQUo8fGmexsFVQlv0vn1znhiQOCUrYroZeiFqnK9+ELWvUVB0YU40fus5jA+Errph7x7ULJJFjabWkC7y9rhvYSQdKdf/p6BtzGa4iIBF8/qOrfTl+6ahCn3Nmhq3ikqxf/eu1aqU4frlCEgLubex97Z3jLNOYhoYbroBDaXaudZUZxeFR82x93s8d43Cfdqx1aHdDDwBMm7rveFLsmZftjKEMW1+7d8O9d69GS5hDEWFLzpmisXodoaCuMXPMDBj8d/92Y8WsTFWD6ypAAHht94nx24yIOGc//+p111851x6JWaGYINI4U33hPHc0NI3F+scWLix+5KvXufRxlMx3JGZvr+sB38lbc3XaHT0xDO7YsUpvcX5F7lfvXW8PRbQpTrGmMStiZfi0P/znzVUlWUKSy8tdRPje7/eLqYT8FwY4lBqVL9u/Yn6Bs9BabfbG40N9fWc5vc/rrUTc9kxwlhXbUdd9tlxDRrb/07cteej+K7b/5o5P3bmyMMdvDUWsUEzYkjFMbDk3pyhwhpwzYYtYf7h2Tv5LP3nf1RfNdrnyVHHK4Ehsy74O8GsqQGAMKSYWzcn7+C2Lnvvue/7049tvu25BUOPmYMQaM1WPeI0z5g5EGKKSR7QjljkQufHq+a/+9/vKijIIyA0OKsWVHfU9qobylGMJ4eDRfnAnOKrejxD0+Y+s+sTdq2M9Y0omdpL4aA5Fi3IDz/7o1o3LSoVwFaRISQyx+cTw755rZJlG6iQRTgE+V66aaVdX5VU6bRtDRAC4/0gfRSzuC0y1uFgR3p7bdvxrn7542iJwxlES7ZuoNTlDFFHrkrWzi/ICtpBrFhY//KV3ffWvLnlua+sfX2/eur+zt2cULAkaA4MzjXGOGKddqTa56vijU1EivrrV65VEtiVE1AZJJeU5n/rE2n/46OrsoOEyPFapNc7YyzvaejtCepZP+bqKi3zzhmopSUi6YUPVDRuqmo4PPfl68zNbWnY29IwNRIBIjYhrPPkM5x8RxjetkNI2bYjZwHBpbdHf371G1TJI1ycwESHDP7xyFGKCBQ2ZkAhSrTb2HO6T5PqQV36HpJ996V35Wb5v/XwHAGgZBkMkIqKTHg0CIoIqZrMjFpjiXZdWP/zlq2tm5yj8dTVSIIb44K/3hAcjRl5gerpwai7gFsASK2oKFDPd8cLd1dDrzGEkScyv72/sPXx8aGFVnvulNhmoYogneseaJlJhUD7wuy+dczILAzArP/ixWxZ97JZFvYORHXU9b+zt2HGoq75lsLM/LMdMEBIQgSFwBgyBxbdU/IWQBEkgCYQEte59vLAwY+2i4tuvmnfrlfMKc/3qF7nHTeUG/c/mhtMiZ/DzmzZWMYYUD6RhfmXufXevvu/u1S2doW0Hurfs7dhZ39PUNjQwFBFRO36pq4bDMT46RZlTpDU1HPUTEQJ6VVn25SvLPnjt/OvXV+nxa2D3qAGcsZGw9dgrRyBwyt0kSUIfrz/W39IRmlue43LZqMyEJPqPv9l49dqKb/x0+5Y9JyAmQGOgs/iEEoEgsCXYAgxtWW3R5+5a+Yn3LFZv2CVqSEkMWVPb0K+fruNZPjFdvXs1V4ArQSU4lO8w9cwoA6Uz6kinKF5gOxh5ftvxhVV5koiluK5CjfLg0YHwUETLME5LrNhC6tm+G9ZXqn2olqNqNcIQi/ICN22sumljFQAMj5otnaHG40NNx4eaO0Jt3aO9Q5Hh0dhY1I7E7DgbCyFgaEG/lpNpFOcFq8uyF1fnLa8pWFZTUJgbiG9sQaptqltAlISIh5oHXtjawjOMpLthx+x5c/JVZ6BkgCWJpCTOWHVpdnVp9h3XzQeAnoFw84lQY9tQ4/Gh1s6R9t7R/qFoKGyFo1bUFAoJOcOAT8sM6LlZvtKC4Nzy7CXzClbUFC6ek5eRoJwljl+3IxJSapw9+kJjR8ugnhsYv50IQNd4bDDy8o72OeU57peN8geFpBvWV96wvnLL3o7NW1q2Hexq7R4dGo3ZNnGO+Vm+ilmZaxcV37ih+oo15ZwhEEjwAPGJgDH48sPvRIajRm7AnvnAISWBj6tV5SxOQcSBULSxbcixFo6SLHz2rda//dAKlvpoReHjjvpusARDHF/5wxlaY+bqVWW1lXnjRd8QUd0LEJEkICLGMCfTWDG/UAmmJS1miqgpTCvuUiOArjO/zv1nVLhKSYr95fKwOvmFQBriN3+1yxo1k4uPMYSofd26Cp/Ox6ufMETVz1khiLodKM4PFucHL1lWMv5rwzE7ZgrLlokPgqFzv087s8I1CVWejEgliWOm+NZv96BPozMS52rZ/P6VI3956xKv7r2UlhJneOnKsktXlgFANGaPRmwpiTHIDBp+g58cryDO0f05p77n5R3tv9/coGX7pw01nAMHIti2zMkPLp7jmBQLHKGxdai/P8yd8n8lEQb0bQe6uvrDJQVBclEsNMmLDFAtptnp9VFK1f7mDdUqZ3wmzRcRebwPFBDFcSTRNR0ZQ5/BfePW1plIob6EITCGHvpWQpLG2DuHujc908CzfcnFJ4lAZ7dcOgfO4gAkEWQ8LMbjeQYMMejTghPV9SvWmfrLDFGVvXg4TcrdeOj/HGiq69bzgmd670ISyzBe395ef2xgYXW+kN5wcNWXCEnqePD7tPGgr3AWEb3DRwKEaMz+62+9rnpQTWfJHnO+hUy7tjK3KNdhp1i1bvY19blRl1clpKHesVd3tZMXxNBzR0acYcwSByYixQopMaCrSOS8bwMRGEONo8aZupVIoAnQKRYvNFDXMe5vZCYOvoiEkJ/9j9eFLZLHLyLYpigpz964ohQSzXfPvR548iE5qu8524jUxVBy7N5CvZSkcdbSOfLVh9/hmb6ztdHQOLNGYt977AB6XS6lhqb61IwfOEP09hpb3cV8+eF36g92nRk4z1DgYIhgydW1RW5UVQFg1+Fet14AABBt3trqhvA2yVwsADSfCLWd0ZqcMRRRe8G8fNWlxVnQhCoxeopBqsutbCE5Z//6sx07d7Trmb4k8nLGMGJdtXp2dobhuBp1+keUZNB/8usvDw+EmX7WTuBCSJ7l+9VTh460DzPGUrHrTh27x18uBGka+9Pbx7/9i516TkDY0y3uwNxs2XVOO8UmM6P7J82mP4dfCn7t1V3to2EnPROmFBYBwL7GPnvEPM3VZIgQE9dfXKlrzJ5etU43Zgmpa+zJN499/Ufb9By/PDWDSIjvvqyaprFGxhMc1Dj7wg/ffuW1o3q2/xxXDATANBYejt7//be8ElWfNlN3MS2dI/f80/NMY3QhFhxzPEMsw4gfsA4zo9A/HG1qH3apEk4Emk/rODG87VAXpL6EdHt995myeqo04JZLq8F1TdF07jGds+11PR/54nNc53JcgIwIlilyijOuvmg2JkL3PwMctKWusR89cfDBH2877SblbE6Hnu3/458aHn2xSeNsOjOLLmMxznAkbN1+/+ae3jHu06Y5SHEOHIoUW1qcuaAyBxySYgEADrcODQyEucZdwj1DBFNu3tIK7oqIJ5P62tXQe5qLFBenrnArTj3Ne0zjbPfh3nf/zZOjEQuNU0bEECFqbVheOis/qPJ5M3w4SvZd19j/bG6496svaxnGJI8iIuB+/d5vvNLQOqRx5mEfudShBjI0bfmBB57ds7dDz56+wg0PgIMhgCmWzs0P+nXpKAA+mRmNeNB3M94zYftxFbGnaGki4vBorL7l9E6xSpz66rWzM5Q49czeZZJICNI19uL2tqs//YfewYgW0KQ444ZI0rsvrXYssDbNfjsiaJx9+7d7Pv6l57hfo0mLNksiNNjQcPT2+57pG45yjkLO3PGqsh3Tkrffv/n5V44aeRcgteHW4wAhVQWHs4WlNtfuw960QZOSmE9rONp/4Eg/puZuJd6avHWot3eUnyoXSATEUF1bXnDh4vMHmIic40OPHbjps38cGjMnQg2wbOHLDVx/SRXObAdKORqcYdQUn/nmq/f926taUAecmrCTFKRnGPWNvdd/9o+9Q1HuUlc9lXPHOQ6EYjf/7ZObX2wy8gO2fSGfkzmaMAKNO25KkvTn90+dTX820ziTY6bjngmTdJF2n9GaHBEsy86blXnVmnIA5+LU03AsE5HGWUff2J3/+Nxnv/qi5EwzuDzDOWeIFLXXLCqeV54t3dFtUw0ZytHYfqj7sk889vBv9ug5fmepXCGknuXfva/z6s/84Uj7sMp3zJyUsCIKaZzta+q7/JOPvfxmi5F3gVHDCXCoAid/tm95jfN2zYjYOxRpbJ+CzuhksMxxz4RJ2o767gkSHxFr44qyghy/GxGd1G0w1dFeFYD87MlDaz+yadNTdXqO/2zdqpVs/Y3rKwlASjnzIIOSkDE0EvviD9667JOP7TzYZeQH1EidRgFSz/YfaOi59OO/f/L1Zo0zRLTFBQ7U1GCVitJPnzx06SceO3SkX8/xX3DUAAeVo4hxUmzFLIftmlXNaP2xwaH+sOb3RotZ9UzYWdfd0hmqLs1WbDQPXxNnjAj2Hj6dFKtoJXdeOx8AbFsCZ4zBTMgmqmJTVY4FAJu3tHzzFzu3bm8Dv3buGwdbSCPH//6ra4BAShJIDC/8gOIFGgSco8YxHLV/ubn+W7/c1Xx0gGX7tAzD/V4SQuqZvu6h6K2fe/reO1b866cvLsoNxGOEaX8FqsxU40zj2Hh86IHvbf3j840Q1PWgLmZGJOUEOMAUKxcUOibFKsbHvqY+iNnj+c4uF5au8ehg5KUd7Z98z2IpiXH0cBYZYkffWFP7EJxKihVCahm+nAxDEiULxhWxTVVeT+eKS5Zyq4pMBhiO2k+/0fzDxw68sbMNCPQcv5R0jpWn7suKZmUqNap416IEDKmC9+ncQkSknB7OUWmPdfaFH33+8MN/ONh4uBf8mpEXUF3vPco+Sm5w1PkPf737qTeO/ePHL/rYLYtU1XySTZPiAjaSMl5YzDh2D4S/v2nf9zftCw1G4nM3Y3K3UwcOACBaXVtsC2kLSZxP9eNCEiLtaujxtopQcTk2b2n55C2LpSThXSGx0qo4cKR/dHACUiwhvPf+zQur865aXX7Nuop1S2aVFmaMF7xT+YWkIoOHg1aKD6q0WRFeeJy0ALsbeh9/+cjjLx9pOtIHDLUMQ22M8y5cprHOvrGVH9m0akHhNWsr3rV29soFRblZvvHsGCGIgOKVoOD1iBJKFuqcV+srErO37uv83fONf3yjua9jRPlNJMnzRKYiBem5gfbu0Xv/9cXvbdr36duX3nH9gpKC4PjZZN7VgyaIS6TK9tV4j7QN/fzp+p8/eai7PQSZhp7jFzMsZYvskh9MLSmCIGJiz6a7TiN3TtXWfOx3u/d3aUHdq+NCCXAV5Aban/m43+Cev6l///XuB775qpEfPHOxEgDFbDAFcJZbEFxWU7B+Wcn6ZaUr5hdWlWWdFjSpU4UgwQfDZIY5/gPHQ2FSwQ/idzZJf4cxPO2bQ2Pm7sO9L21ve+Ht1l0NvXLUBL+m+08emFNysiBqgyXA0GaVZK2qLVy/rHT90pIlc/PLijIm9KuTPgvCuBGdHNj44UByHEm1GwQ8k7fS2Te2o67nubdaX9zeduTYAFgCgrphaEnWXwo3BiJjaEVMiInC0ux3X1r9gWtqNq4ozcn0jR+DmGDgk5jHxKhPm8T+oeiru9o3Pd/43NutYwMRCOq6T5NyBt2Jq11WWpQ5NeBAAEnkM7T/+rtL87P9kqbcmlipFY2Erc99583RMZNxL4vEEVHE7C//5bqVC4osIb1Kc6hkwXce3fv2zjYenJhNpFaA6rcOMRssARoLZPvnlecsmZe/qrZ4eU3BvNk55UUZGe7aHY+3mCk6+sYaWgZ3N/RuO9i1p7H3RMcIxGwwOPNrGmeONxhinLcqiWxTQMwGIcHQcvICCypzl9cUrFxQtHRewdzZ2SX5GYbu2V3SSNg83jV6qLl/R33PO4e69zf1DfeFQUjwaZpfY4hiencRQ0SGlmlD2AKNlZfnbFxecsWa2esWz5pfmTMeRFwM2Wo6PvjOwe6Xtrdt3d/Z3RECAsjQDY0r72ZmORrOgOPkXgpbLkMBDOqpiBcRQYQtSEUo6NOYzs5bqJHcckRkCQmmAEuAJNC5nmGUFAQrS7LmludUl2ZVl2aXFgRnFQRzM31ZQT0Y0AyNjxdGtwVJSVHTjppiNGKFxsy+wUjXQLite7SlM3Skbbi1M3SiLxwNRcESwBkYGjc4ZzjeBfDm7E3K3tkSTBssCQTg48EsX3lRhhrRnNLsytKskoJgcV4gJ8PICOgZfk3TWFJhgABsW0pJkZgdiYnRiDk8YnYPhrv6w61dIy2doeb2UEtnqKs/LMZMEAQaA5+m6wwRp8HFOPeccsbiGKpUzgJ6SVHG/Irc2qrc+RW51aXZpYUZRXn+7KAR9GsBv8YZ005qDoAtpGXLsag1MmYNjkRP9Iy1do00Hh+qbxk43DrU3j0CYQsQwa/pBgcEKWcoQ8gtcJzMiTrY+wSQSgq8q2c7+wMn9Sam9JaTiQAisgWRLcCWYMu4mp7GwOA+n5YR0AM+zdBY0K8lr5MjUdsS0rRkzBRjUSsWs8GSYIk4eGlM6dPFSdxAUqackKZGpLBNqhSDUsSzKf7CDQ46D/q1jIDuN7ih86BfS2ZYw1FbSFKSReGoZSlUHf82NIY611gceWfaiYuIjAEC2lJKS4IpQEggJVLEmcEzA3rAr/l1rmss4NfUK7ElRaK2ZctIzB6NWLGoDaYAdQ2kIeic6VzjbHpm8AIDR9qcvHRI4EjCqZBEJEkQxbVFKSHMqURZFIIwBARgqNKfSYckmUS8sL0ak0nfJDrE/R0ZD+XjninFx5/4ichQXV2PH5H882Hjjr9jSu758wycITDkDFkis6om8c+Im5sEDi29n6fN4pvi1CRh3EVimFQAP83TSf4gAilJzqSq9niS78wRcTzp+J1tRAmZHwn0ZzmbRGLKA4/PoyCCP89RJy0NHDNi+538N/0/M6LksP5/m8r/LwbO0vs2bWlLWxo40pa2tKWBI21pS1saONKWtrSlgSNtaUtbGjjSlra0pS0NHGlLW9rSwJG2tKUtDRxpS1va/jxNQ0y/hLSlLW2TskRbT9CELdOvI21pS9vkkAPAlpYttdKizPTbSFva0jZJj0MIOasg4/8C6/1c4izJN14AAAAASUVORK5CYII=">
+    <div class="top-title"><b>スキー実習 代替学習プログラム</b>日本体育大学</div>
+    <div class="save" id="save" role="status"></div>
+  </div>
+</header>
+<div id="app"></div>
+
+<dialog id="dlg" aria-labelledby="dlg-title">
+  <div class="dlg">
+    <div class="dlg-h"><h2 id="dlg-title"></h2><button class="x" id="dlg-x" type="button" aria-label="閉じる">✕</button></div>
+    <div class="dlg-b" id="dlg-b"></div>
+    <div class="dlg-f" id="dlg-f"></div>
+  </div>
+</dialog>
+
+<script>
+/* 問題データ：教材原版PDF『詳細解説・訂正（赤字追記版）』から転記。修正したら CONFIG.bankVersion と各 version を更新 */
+const SOURCES = {
+ "S01": {
+  "title": "冬山登山の警告・装備と行動の確認資料（2025年12月）",
+  "publisher": "山岳遭難対策中央協議会／日本山岳・スポーツクライミング協会掲載",
+  "url": "https://www.jma-sangaku.or.jp/wp-content/uploads/2025/12/winter_alert_link_20251203.pdf",
+  "scope": "警告本文、装備表、出発前・行動中・下山後の確認",
+  "checked": "2026-10-01"
+ },
+ "S02": {
+  "title": "雪崩リスクの軽減（雪崩の基礎 UNIT 1）",
+  "publisher": "日本雪崩ネットワーク（JAN）",
+  "url": "https://nadare.jp/basic/unit_1.html",
+  "scope": "雪崩リスク、危険への曝露を管理する考え方",
+  "checked": "2026-10-01"
+ },
+ "S03": {
+  "title": "雪崩の発生（雪崩の基礎 UNIT 2）",
+  "publisher": "日本雪崩ネットワーク（JAN）",
+  "url": "https://nadare.jp/basic/unit_2.html",
+  "scope": "板状・点発生、乾雪・湿雪、表層・全層",
+  "checked": "2026-10-01"
+ },
+ "S04": {
+  "title": "雪崩地形（雪崩の基礎 UNIT 3）",
+  "publisher": "日本雪崩ネットワーク（JAN）",
+  "url": "https://nadare.jp/basic/unit_3.html",
+  "scope": "発生域・走路・堆積域、地形的な罠、雪庇、植生、傾斜",
+  "checked": "2026-10-01"
+ },
+ "S05": {
+  "title": "雪崩情報で使われる雪崩区分（雪崩の基礎 UNIT 4）",
+  "publisher": "日本雪崩ネットワーク（JAN）",
+  "url": "https://nadare.jp/basic/unit_4.html",
+  "scope": "ストームスラブ、ウインドスラブ、持続性の弱層、情報の読み方",
+  "checked": "2026-10-01"
+ },
+ "S06": {
+  "title": "Avalanche science and prevention",
+  "publisher": "WSL Institute for Snow and Avalanche Research SLF",
+  "url": "https://www.slf.ch/en/avalanches/avalanche-science-and-prevention/",
+  "scope": "管理外の雪崩リスク、情報・装備・訓練",
+  "checked": "2026-10-01"
+ },
+ "S07": {
+  "title": "FIS Code of Conduct for Skiers and Snowboarders",
+  "publisher": "国際スキー・スノーボード連盟（FIS）",
+  "url": "https://assets.fis-ski.com/f/252177/49280306c8/fis-code-of-conduct-for-skiers-and-snowboarders-en.pdf",
+  "scope": "行動規範10項目（速度、進路、追越し、進入、停止、歩行、救助等）",
+  "checked": "2026-10-01"
+ },
+ "S08": {
+  "title": "スノースポーツ安全基準",
+  "publisher": "全国スキー安全対策協議会（安比高原掲載）",
+  "url": "https://www.appi.co.jp/snow-mountain-resort/assets/pdf/safety_20231201.pdf",
+  "scope": "ゲレンデ行動・リフト利用・講習・事故対応",
+  "checked": "2026-10-01"
+ },
+ "S09": {
+  "title": "スキー場からのお願い",
+  "publisher": "日本鋼索交通協会／全国スキー安全対策協議会",
+  "url": "https://www.nikokyo.or.jp/pages/24/",
+  "scope": "管理区域・指定コース、流れ止め、掲示・放送・係員の指示",
+  "checked": "2026-10-01"
+ },
+ "S11": {
+  "title": "How to Ski",
+  "publisher": "REI Co-op Expert Advice",
+  "url": "https://www.rei.com/learn/expert-advice/how-to-ski.html",
+  "scope": "基本姿勢、プルーク、ターン、階段登行、開脚登行、速度調整",
+  "checked": "2026-10-01"
+ },
+ "S12": {
+  "title": "525 公認スキーバッジテスト規程・新旧対照表（2025年7月4日改正）",
+  "publisher": "全日本スキー連盟（SAJ）／秋田県スキー連盟掲載",
+  "url": "https://ski-akita.com/edu/edu_pdf/2025-2026/jrbt_kitei.pdf",
+  "scope": "PDF3ページ右欄の改正後本文、第19〜22条",
+  "checked": "2026-10-01"
+ },
+ "S13": {
+  "title": "526 公認スキーバッジテスト基準及び実施要領（2025年7月4日改正）",
+  "publisher": "全日本スキー連盟（SAJ）／愛知県スキー連盟掲載",
+  "url": "https://skiaichi.sub.jp/educations/education/informations/202526/SAJ_e_526.pdf",
+  "scope": "PDF1〜2ページ、級別テスト1〜3級の種目・斜面・評価・合否判定",
+  "checked": "2026-10-01"
+ },
+ "S14": {
+  "title": "SAJ教育本部規約・規程の改正・制定・廃止について",
+  "publisher": "島根県スキー連盟（SAJ教育本部通知掲載）",
+  "url": "https://ski-shimane.org/kyoikubu/?p=14360",
+  "scope": "2025年7月4日改正の規程525・526が承認済みである旨",
+  "checked": "2026-10-01"
+ },
+ "S16": {
+  "title": "32 Degrees: 3 Tips to Smooth Out Your Turn Transitions",
+  "publisher": "PSIA-AASI",
+  "url": "https://thesnowpros.org/2022/01/17043/",
+  "scope": "ターン形状と方向を利用した速度調整",
+  "checked": "2026-10-01"
+ }
+};
+const QUESTIONS = [
+ {
+  "id": "A01",
+  "pattern": "A",
+  "no": 1,
+  "category": "雪山登山・雪崩",
+  "safety": true,
+  "statement": "最新の雪崩情報を読んでいれば、雪崩救助用具の操作練習をしていなくても、その情報で操作技術の不足を補える。",
+  "correctAnswer": false,
+  "explanation": "雪崩情報は、行動する場所や日程を判断するための資料であり、救助用具を操作する技能そのものではない。雪崩事故に備えるには、情報確認に加えて適切な装備を携行し、仲間全員が初動の救助方法を練習しておく。情報を読んだだけで、操作経験の不足が埋まるわけではない。",
+  "learningPoint": "最新情報の確認と、雪崩救助用具の携行・操作訓練を、それぞれ実施する。",
+  "researchKeywords": [
+   "予防行動・装備・仲間による救助の訓練"
+  ],
+  "sources": [
+   {
+    "src": "S06",
+    "section": "予防行動・装備・仲間による救助の訓練"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "A02",
+  "pattern": "A",
+  "no": 2,
+  "category": "雪山登山・雪崩",
+  "safety": false,
+  "statement": "新たな降雪がなくても、風が既存の雪を運んで吹きだまりを形成すると、雪崩の危険が変化する。",
+  "correctAnswer": true,
+  "explanation": "雪崩の危険を変えるのは新たな降雪だけではない。風が雪面の雪を別の場所へ運び、吹きだまりに板状の雪の層をつくることがある。これをウインドスラブといい、降雪が止んだ後でも形成し得る。判断には、風の強さ・継続時間・移動可能な雪の有無も関係する。",
+  "learningPoint": "「雪が降っていない」ことと「積雪の状態が変化していない」ことを区別する。",
+  "researchKeywords": [
+   "ウインドスラブ"
+  ],
+  "sources": [
+   {
+    "src": "S05",
+    "section": "ウインドスラブ"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "A03",
+  "pattern": "A",
+  "no": 3,
+  "category": "雪山登山・雪崩",
+  "safety": true,
+  "statement": "管理区域外の斜面に先行者の滑走跡が残っていれば、その斜面の積雪は現在も安定していると判断できる。",
+  "correctAnswer": false,
+  "explanation": "滑走跡が示すのは、先行者がその時点で通過したという事実までである。斜面全体の積雪が安定している証拠にはならない。持続性の弱層が残る斜面では、数人が通過した後でも、別の場所への荷重がきっかけとなって雪崩が発生する場合がある。",
+  "learningPoint": "先行者の滑走跡だけで安全を判断せず、当日の雪崩情報、地形、積雪の状態を確認する。",
+  "researchKeywords": [
+   "持続型スラブ"
+  ],
+  "sources": [
+   {
+    "src": "S05",
+    "section": "持続型スラブ"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "A04",
+  "pattern": "A",
+  "no": 4,
+  "category": "雪山登山・雪崩",
+  "safety": false,
+  "statement": "視界不良時の現在地確認では、記憶に頼るのではなく、地図・コンパス・GPS等を用いて位置を確かめる。",
+  "correctAnswer": true,
+  "explanation": "吹雪や濃霧では、周囲の地形や目標物が見えにくくなる。現在地の確認には地形図・コンパス・GPS等を使い、それらを扱う準備も行う。ただし、位置が分かることと、足元や進路の安全が分かることは別である。位置表示だけで行動継続を決めない。",
+  "learningPoint": "現在地を確認した上で、視界・地形・退避条件を含めて行動を判断する。",
+  "researchKeywords": [
+   "PDF1頁「吹雪から身を守る装備」・PDF3頁「計画と対応力」"
+  ],
+  "sources": [
+   {
+    "src": "S01",
+    "section": "PDF1頁「吹雪から身を守る装備」・PDF3頁「計画と対応力」"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "A05",
+  "pattern": "A",
+  "no": 5,
+  "category": "雪山登山・雪崩",
+  "safety": false,
+  "statement": "雪山の登山計画には、予定する行程だけでなく、途中で下山するためのエスケープルートも組み込む。",
+  "correctAnswer": true,
+  "explanation": "エスケープルートは、天候悪化や体調変化などにより、予定の行程を完遂せず途中で下山するための経路である。主ルートだけを決めておくと、変更が必要になった時点で選択肢を検討することになる。計画段階で途中下山の経路も確認しておく。",
+  "learningPoint": "登頂・予定行程の達成だけでなく、途中で引き返す選択肢も計画に含める。",
+  "researchKeywords": [
+   "PDF3頁「エスケープルート」"
+  ],
+  "sources": [
+   {
+    "src": "S01",
+    "section": "PDF3頁「エスケープルート」"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "A06",
+  "pattern": "A",
+  "no": 6,
+  "category": "雪山登山・雪崩",
+  "safety": false,
+  "statement": "板状の積雪の下にある弱い層が壊れると、その上の雪がまとまって動き出す板状雪崩につながることがある。",
+  "correctAnswer": true,
+  "explanation": "板状雪崩では、ある程度まとまった板状の雪の層をスラブと呼ぶ。その下の結合が弱い部分が壊れ、破壊が広がると、支えを失った上の雪がまとまって動き出すことがある。雪の表面だけでなく、積雪内部の層の構造が発生に関わる。",
+  "learningPoint": "用語の対応は「上側の板状の雪＝スラブ」「結合の弱い部分＝弱層」である。",
+  "researchKeywords": [
+   "面発生雪崩・誘発のメカニズム"
+  ],
+  "sources": [
+   {
+    "src": "S03",
+    "section": "面発生雪崩・誘発のメカニズム"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "A07",
+  "pattern": "A",
+  "no": 7,
+  "category": "雪山登山・雪崩",
+  "safety": true,
+  "statement": "自分が立っている場所の傾斜が20度以下なら、上方の急斜面から雪崩が流れ込む可能性を調べなくてもよい。",
+  "correctAnswer": false,
+  "explanation": "雪崩の危険は、自分の足元で雪崩が発生する場合に限らない。上方の急斜面で発生した雪が、走路を通って緩斜面の堆積域まで到達することがある。したがって、足元の傾斜が20度以下でも、上方の斜面とつながる場所では巻き込まれる可能性を調べる。",
+  "learningPoint": "足元の斜度だけでなく、上方の発生域・走路・堆積域まで含めて危険を確認する。",
+  "researchKeywords": [
+   "雪崩地形・走路と堆積区"
+  ],
+  "sources": [
+   {
+    "src": "S04",
+    "section": "雪崩地形・走路と堆積区"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "A08",
+  "pattern": "A",
+  "no": 8,
+  "category": "スキー滑走・安全",
+  "safety": true,
+  "statement": "大学の実習班が隊列を組んで滑走しているときは、一般の利用者より実習班に通行の優先権がある。",
+  "correctAnswer": false,
+  "explanation": "スノースポーツ安全基準では、講習の受講者に他の利用者に対する特別な優先権は認めていない。大学の実習班であることや隊列を組んでいることも、優先の根拠にはならない。班としての指示に従うだけでなく、各自が進入・追越し・停止等のルールを守る。",
+  "learningPoint": "実習班にも一般利用者より優先する権利はなく、他の利用者を妨げないように滑走する。",
+  "researchKeywords": [
+   "第2章9「受講者の責務」"
+  ],
+  "sources": [
+   {
+    "src": "S08",
+    "section": "第2章9「受講者の責務」"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "A09",
+  "pattern": "A",
+  "no": 9,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "救助活動中のパトロールや緊急車両が近づいたときは、進路を空け、必要に応じて減速・停止する。",
+  "correctAnswer": true,
+  "explanation": "救助活動中のパトロールや業務中の雪上車両がある場合は、その運行を妨げない。進路を空け、周囲の利用者との接触にも注意しながら停止または徐行する。車両のすぐそばで見物したり、救助活動の進路にとどまったりしない。",
+  "learningPoint": "「進路を空ける」「停止または徐行する」「係員の指示に従う」を組み合わせる。",
+  "researchKeywords": [
+   "第2章5「徐行義務」・6(4)「滑走時の義務」"
+  ],
+  "sources": [
+   {
+    "src": "S08",
+    "section": "第2章5「徐行義務」・6(4)「滑走時の義務」"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "A10",
+  "pattern": "A",
+  "no": 10,
+  "category": "スキー滑走・安全",
+  "safety": true,
+  "statement": "初心者用の緩斜面であれば、板が外れても速く流れないので、流れ止めの機能を確保しなくてもよい。",
+  "correctAnswer": false,
+  "explanation": "流れ止めは、外れた滑走具が流れて他の人に衝突するのを防ぐための対策である。初心者用コースや緩斜面であることは、省略できる条件ではない。用具に適した流れ止めを備え、その機能が確保されている状態で使用する。",
+  "learningPoint": "斜面の緩急や技量にかかわらず、用具に適した流れ止めの機能を確保する。",
+  "researchKeywords": [
+   "「流れ止め」",
+   "第2章6(5)"
+  ],
+  "sources": [
+   {
+    "src": "S09",
+    "section": "「流れ止め」"
+   },
+   {
+    "src": "S08",
+    "section": "第2章6(5)"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "A11",
+  "pattern": "A",
+  "no": 11,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "基本的なプルークの板の形は、トップを広げ、テールを近づけた逆ハの字である。",
+  "correctAnswer": false,
+  "explanation": "基本的なプルークでは、板の先端であるトップを近づけ、後端のテールを左右に開く。問題文はこの前後関係を逆にしている。トップを開き、テールを近づける形は、開脚登行で用いる形であり、プルークの形とは区別する。",
+  "learningPoint": "基本的なプルークは、トップを近づけ、テールを開いたハの字の形である。",
+  "researchKeywords": [
+   "How to Ski in a Wedge",
+   "How to herringbone uphill"
+  ],
+  "sources": [
+   {
+    "src": "S11",
+    "section": "How to Ski in a Wedge"
+   },
+   {
+    "src": "S11",
+    "section": "How to herringbone uphill"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "A12",
+  "pattern": "A",
+  "no": 12,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "フォールラインは、その地点から斜面を最も直接的に下る、最大傾斜の方向を指す。",
+  "correctAnswer": true,
+  "explanation": "フォールラインは、その地点で斜面を最も直接的に下る最大傾斜の方向を示す。コース名やコースの中央線を指す用語ではない。板がフォールラインに向いているのか、それを横切る向きなのかを区別すると、滑走方向や登行方法の説明を理解しやすい。",
+  "learningPoint": "フォールラインは「コースの中心」ではなく「その地点の最大傾斜方向」である。",
+  "researchKeywords": [
+   "How to side-step uphill",
+   "フォールラインの定義"
+  ],
+  "sources": [
+   {
+    "src": "S11",
+    "section": "How to side-step uphill"
+   },
+   {
+    "src": "S11",
+    "section": "フォールラインの定義"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "A13",
+  "pattern": "A",
+  "no": 13,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "リフトの乗り降りに不安がある場合は、乗車前に係員へ伝え、必要な案内や補助を受ける。",
+  "correctAnswer": true,
+  "explanation": "リフト利用では、掲示された注意事項に従い、不安や不明点がある場合は乗車前に係員へ伝える。同級生が付き添っていることや、周囲が乗れていることだけでは、自分が安全に乗降できる確認にならない。係員から必要な案内や補助を受ける。",
+  "learningPoint": "乗降方法が分からないまま乗車を始めず、先に係員へ相談する。",
+  "researchKeywords": [
+   "第2章2「リフト搭乗にあたって」"
+  ],
+  "sources": [
+   {
+    "src": "S08",
+    "section": "第2章2「リフト搭乗にあたって」"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "A14",
+  "pattern": "A",
+  "no": 14,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "後方から速いスキーヤーが接近した場合、前方のスキーヤーが進路を譲ることを前提に、後方の人は滑走ラインを選んでよい。",
+  "correctAnswer": false,
+  "explanation": "FIS行動規範第3項では、後方から来る人が、前方の人を危険にさらさない進路を選ぶ。前方の人が後方の接近に気づき、進路を譲るとは限らない。後方の人は相手の動きを見て速度や進路を調整し、譲ってもらうことを前提に接近しない。",
+  "learningPoint": "後方から来るスキーヤーが、前方のスキーヤーを危険にさらさない進路を選ぶ。",
+  "researchKeywords": [
+   "Rule 3 Choice of route"
+  ],
+  "sources": [
+   {
+    "src": "S07",
+    "section": "Rule 3 Choice of route"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "A15",
+  "pattern": "A",
+  "no": 15,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "追越しの間隔は、相手が現在と同じ方向へ滑り続ける場合だけでなく、不意に動く場合も考えて確保する。",
+  "correctAnswer": true,
+  "explanation": "追越しでは、相手が今の滑走方向を保つ場合だけでなく、ターンやバランスの崩れなどによる動きにも対応できる空間を残す。現在ぶつからない程度の間隔だけでは不十分である。相手の技量や周囲の状況に応じて、追越す時機と間隔を判断する。",
+  "learningPoint": "追越される人の意図した動きと、不意の動きの両方に配慮する。",
+  "researchKeywords": [
+   "Rule 4 Overtaking"
+  ],
+  "sources": [
+   {
+    "src": "S07",
+    "section": "Rule 4 Overtaking"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "A16",
+  "pattern": "A",
+  "no": 16,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト2級の得点による合格基準は、3種目の取得ポイントの合計が195ポイント以上である。",
+  "correctAnswer": true,
+  "explanation": "採用するSAJ実施要領では、2級は3種目で、1種目あたり100ポイントを満点とし、取得ポイントの合計195以上を得点の合格基準とする。判定対象は3種目の合計であり、全種目を個別に65以上にそろえる条件ではない。",
+  "learningPoint": "2級は「3種目合計195ポイント以上」と確認する。",
+  "researchKeywords": [
+   "PDF2頁・Ⅱ2(1)②c 2級の合否判定"
+  ],
+  "sources": [
+   {
+    "src": "S13",
+    "section": "PDF2頁・Ⅱ2(1)②c 2級の合否判定"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "A17",
+  "pattern": "A",
+  "no": 17,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト3級は、スキーの実技を行わなくても、筆記試験だけで合格を認定できる。",
+  "correctAnswer": false,
+  "explanation": "SAJの通常の3級は、講習の中で滑走課題への到達度を評価する講習内テストである。筆記の知識確認だけで実際の滑走を評価したことにはならない。今回の大学実習用Web課題も、外傷学生の知識学習であり、SAJ3級の実技評価を代替しない。",
+  "learningPoint": "3級は雪上の講習内で実技を評価し、筆記試験だけで合格認定する方式ではない。",
+  "researchKeywords": [
+   "PDF3頁右欄・第19条",
+   "PDF1頁・Ⅱ2(1)本文、PDF2頁・③b"
+  ],
+  "sources": [
+   {
+    "src": "S12",
+    "section": "PDF3頁右欄・第19条"
+   },
+   {
+    "src": "S13",
+    "section": "PDF1頁・Ⅱ2(1)本文、PDF2頁・③b"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "A18",
+  "pattern": "A",
+  "no": 18,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト1級の受検資格に関する条件には、2級取得者、またはスーパージュニア認定者であることが含まれる。",
+  "correctAnswer": true,
+  "explanation": "採用版の規程第20条では、1級の受検について、2級取得者に加え、スーパージュニア認定者も条件を満たす。これは既得級・認定に関する条件であり、1級の事前講習など別の受検条件を免除する意味ではない。該当する条件をそれぞれ確認する。",
+  "learningPoint": "「2級取得」または「スーパージュニア認定」と、事前講習等の条件を区別する。",
+  "researchKeywords": [
+   "PDF3頁右欄・第20条(1)",
+   "改正承認通知"
+  ],
+  "sources": [
+   {
+    "src": "S12",
+    "section": "PDF3頁右欄・第20条(1)"
+   },
+   {
+    "src": "S14",
+    "section": "改正承認通知"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "A19",
+  "pattern": "A",
+  "no": 19,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト1級の実技は、大回り・小回り・総合滑降の3種目で構成される。",
+  "correctAnswer": false,
+  "explanation": "1級は4種目である。内訳は、パラレルターン・大回り、ベーシックパラレルターン・小回り、パラレルターン・小回り、総合滑降となる。2つの小回りは別種目で、不整地を含むものもあるため、「小回り1種目」とまとめて数えてはいけない。",
+  "learningPoint": "1級の実技は、大回り1種目・小回り2種目・総合滑降1種目の計4種目である。",
+  "researchKeywords": [
+   "PDF1頁・Ⅱ2(1)①a 1級の種目"
+  ],
+  "sources": [
+   {
+    "src": "S13",
+    "section": "PDF1頁・Ⅱ2(1)①a 1級の種目"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "A20",
+  "pattern": "A",
+  "no": 20,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト2級を受検するには、あらかじめ3級を取得していなければならない。",
+  "correctAnswer": false,
+  "explanation": "採用版の規程では、通常の級別テストは希望する級を受検でき、2級の受検条件として3級取得は指定されていない。既得級等の条件が付くのは1級である。ただし、3級取得が不要であることと、準備や技量の確認が不要であることは同じではない。",
+  "learningPoint": "2級は、あらかじめ3級を取得していなくても受検できる。",
+  "researchKeywords": [
+   "PDF3頁右欄・第20条(1)受検資格"
+  ],
+  "sources": [
+   {
+    "src": "S12",
+    "section": "PDF3頁右欄・第20条(1)受検資格"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B01",
+  "pattern": "B",
+  "no": 1,
+  "category": "雪山登山・雪崩",
+  "safety": true,
+  "statement": "登山経験が十分にある人なら、雪と気象を観察することで、雪崩の発生を完全に予測できる。",
+  "correctAnswer": false,
+  "explanation": "経験や知識を重ねても、雪崩の発生を完全には予測できない。事前情報や観察は判断材料になるが、分からない部分が残ることを前提にする。経験が豊富だから確認を省くのではなく、積雪・気象・地形を確認し、必要に応じて行程を変更する。",
+  "learningPoint": "経験者であっても雪崩を完全には予測できず、予測の限界を踏まえて行動を判断する。",
+  "researchKeywords": [
+   "PDF1頁「雪崩を警戒しましょう」"
+  ],
+  "sources": [
+   {
+    "src": "S01",
+    "section": "PDF1頁「雪崩を警戒しましょう」"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B02",
+  "pattern": "B",
+  "no": 2,
+  "category": "雪山登山・雪崩",
+  "safety": false,
+  "statement": "板状雪崩は、雪の表面が氷のように硬くなっている場合に限って発生する。",
+  "correctAnswer": false,
+  "explanation": "板状雪崩の「板状」は、まとまりのある雪の層が動き出す性質を指す。氷のように硬い雪だけでなく、柔らかいスラブでも発生する。表面が柔らかく見えることや、粉雪を滑れる状態であることだけで、板状雪崩の可能性を否定することはできない。",
+  "learningPoint": "板状雪崩は、硬いスラブでも柔らかいスラブでも発生する。",
+  "researchKeywords": [
+   "面発生雪崩"
+  ],
+  "sources": [
+   {
+    "src": "S03",
+    "section": "面発生雪崩"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B03",
+  "pattern": "B",
+  "no": 3,
+  "category": "雪山登山・雪崩",
+  "safety": false,
+  "statement": "斜面に見られる折れた樹木や植生の途切れは、過去の雪崩の通過域を考えるための手がかりになる。",
+  "correctAnswer": true,
+  "explanation": "倒木、枝折れ、植生の不連続などは、過去に雪崩が通った場所や到達範囲を考える手がかりになる。ただし、それらの痕跡だけで当日の積雪の安定度を判定するわけではない。また、目立つ痕跡が見つからないことも、雪崩が到達しない証拠にはならない。",
+  "learningPoint": "過去の痕跡による地形の把握と、当日の積雪状態の判断を分けて扱う。",
+  "researchKeywords": [
+   "過去の痕跡"
+  ],
+  "sources": [
+   {
+    "src": "S04",
+    "section": "過去の痕跡"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B04",
+  "pattern": "B",
+  "no": 4,
+  "category": "雪山登山・雪崩",
+  "safety": false,
+  "statement": "ストームスラブでは、新雪の内部、または新雪と古い雪との境界付近に弱い部分ができることがある。",
+  "correctAnswer": true,
+  "explanation": "ストームスラブは、まとまった降雪に伴う不安定性による板状雪崩である。新雪の中に弱い層ができる場合と、新雪と旧雪との境界で結合が弱くなる場合がある。弱い部分が必ず地面付近にあるとは限らず、新しく積もった雪の内部や境界も対象になる。",
+  "learningPoint": "弱い部分は、新雪内部にも新雪と旧雪の境界にも生じ得る。",
+  "researchKeywords": [
+   "ストームスラブ"
+  ],
+  "sources": [
+   {
+    "src": "S05",
+    "section": "ストームスラブ"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B05",
+  "pattern": "B",
+  "no": 5,
+  "category": "雪山登山・雪崩",
+  "safety": true,
+  "statement": "雪崩の規模が小さければ、人を転倒させたり、流したりする力はないと考えてよい。",
+  "correctAnswer": false,
+  "explanation": "小さな雪崩でも、動く雪には重さと勢いがあり、足元をすくって人を転倒させる。流された先に樹木や岩があれば衝突し、くぼ地では埋没が深くなる場合がある。雪崩の大きさだけを見て、人への被害が小さい、あるいは生じないと判断しない。",
+  "learningPoint": "小規模な雪崩でも転倒・流送・埋没・外傷を起こす可能性がある。",
+  "researchKeywords": [
+   "重たい雪",
+   "地形の罠"
+  ],
+  "sources": [
+   {
+    "src": "S02",
+    "section": "重たい雪"
+   },
+   {
+    "src": "S04",
+    "section": "地形の罠"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B06",
+  "pattern": "B",
+  "no": 6,
+  "category": "雪山登山・雪崩",
+  "safety": false,
+  "statement": "沢やくぼ地は、雪崩の雪が集まって深く堆積しやすく、埋没の被害を大きくする地形となり得る。",
+  "correctAnswer": true,
+  "explanation": "沢やくぼ地では、周囲から流れてきた雪が狭い範囲に集まり、深く堆積することがある。このように被害を増大させる地形を「地形の罠」と呼ぶ。発生した雪崩が比較的小さくても、雪の集まる場所では深い埋没につながり得る。",
+  "learningPoint": "発生する雪崩の規模だけでなく、雪が集まる地形かどうかも確認する。",
+  "researchKeywords": [
+   "漏斗状の地形・深い谷や窪み"
+  ],
+  "sources": [
+   {
+    "src": "S04",
+    "section": "漏斗状の地形・深い谷や窪み"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B07",
+  "pattern": "B",
+  "no": 7,
+  "category": "雪山登山・雪崩",
+  "safety": true,
+  "statement": "スマートフォンに現在地が表示されていれば、吹雪で足元や地形が見えなくても、その表示だけを根拠に進み続けてよい。",
+  "correctAnswer": false,
+  "explanation": "スマートフォン等の位置表示は、現在地を知る助けにはなるが、足元の段差、崖、積雪の状態まで直接示すものではない。現在地が分かっていても、安全に進める視界や進路が確保できない場合がある。位置確認だけで、吹雪の中を進み続ける根拠にはしない。",
+  "learningPoint": "位置表示に加えて視界・地形・退避条件を確認し、安全に行動できない場合は継続を見直す。",
+  "researchKeywords": [
+   "PDF1頁「吹雪」「滑落」「雪崩」・PDF3頁「計画と対応力」"
+  ],
+  "sources": [
+   {
+    "src": "S01",
+    "section": "PDF1頁「吹雪」「滑落」「雪崩」・PDF3頁「計画と対応力」"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B08",
+  "pattern": "B",
+  "no": 8,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "リフトの乗り方が分からない場合でも、同級生がそばにいれば、係員に知らせずそのまま乗り込む。",
+  "correctAnswer": false,
+  "explanation": "リフトの乗降方法が分からない場合、同級生がそばにいることは、係員への申告を省く理由にはならない。掲示された注意事項を確認し、乗車前に不明点を係員へ伝える。施設の案内や必要な補助を受け、手順を確認してから利用する。",
+  "learningPoint": "乗り方が分からないときは、同級生の有無にかかわらず、乗車前に係員へ申し出る。",
+  "researchKeywords": [
+   "第2章2「リフト搭乗にあたって」"
+  ],
+  "sources": [
+   {
+    "src": "S08",
+    "section": "第2章2「リフト搭乗にあたって」"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B09",
+  "pattern": "B",
+  "no": 9,
+  "category": "スキー滑走・安全",
+  "safety": true,
+  "statement": "霧や降雪で雪面の凹凸を判別しにくい場合は、普段と同じコースでも速度を落とす。",
+  "correctAnswer": true,
+  "explanation": "霧や降雪で凹凸が見えにくくなると、障害や他の利用者を確認できる範囲が狭くなる。普段のコースであっても、その日の視界に合わせて速度を落とし、見える範囲内で止まる・曲がることのできる滑り方を選ぶ。視界の悪化をコースへの慣れで補えるとは考えない。",
+  "learningPoint": "慣れたコースでも、視界の低下に合わせて速度と滑り方を変更する。",
+  "researchKeywords": [
+   "第2章1(2)・5「徐行義務」"
+  ],
+  "sources": [
+   {
+    "src": "S08",
+    "section": "第2章1(2)・5「徐行義務」"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B10",
+  "pattern": "B",
+  "no": 10,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "コースへの進入や停止後の再出発では、斜面の上方だけでなく下方も確認し、他者を危険にさらさないようにする。",
+  "correctAnswer": true,
+  "explanation": "FIS行動規範第5項は、コースへの進入や停止後の再出発で、斜面の上下を確認することを求める。上方から来る人だけでなく、下方の人や自分の進路との干渉も確認する。自分が動き始めることで、周囲に急な回避をさせないかを判断する。",
+  "learningPoint": "進入・再出発の前に上方と下方の両方を確認する。",
+  "researchKeywords": [
+   "Rule 5 Entering, starting and moving upwards"
+  ],
+  "sources": [
+   {
+    "src": "S07",
+    "section": "Rule 5 Entering, starting and moving upwards"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B11",
+  "pattern": "B",
+  "no": 11,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "スキーで他者を追い越すときは、必ず相手の右側を通らなければならない。",
+  "correctAnswer": false,
+  "explanation": "FIS行動規範では、追越しを左右のどちらか一方だけに限定していない。右からでも左からでも、追い越される人の意図した動きや不意の動きに対応できる間隔を取ることが条件となる。自動車の通行方法を、そのままゲレンデの追越し規則として当てはめない。",
+  "learningPoint": "追越しの側は右に限定されず、十分な空間を確保して安全に行う。",
+  "researchKeywords": [
+   "Rule 4 Overtaking"
+  ],
+  "sources": [
+   {
+    "src": "S07",
+    "section": "Rule 4 Overtaking"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B12",
+  "pattern": "B",
+  "no": 12,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "基本姿勢では、足首を適度に曲げ、重心が足の上に来るようにして、後方に座り込む姿勢を避ける。",
+  "correctAnswer": true,
+  "explanation": "基本姿勢では、足首を適度に曲げ、足元の上でバランスを取りながら動ける状態をつくる。腰を後ろへ落として座り込むことを、安定した基本姿勢とはしない。関節を固めたままの姿勢ではなく、進行方向を見ながら動作に対応できる姿勢を理解する。",
+  "learningPoint": "「足元の上で支える姿勢」と「後方に座り込む姿勢」を区別する。",
+  "researchKeywords": [
+   "The Proper Ski Stance",
+   "How to do a Wedge Turn"
+  ],
+  "sources": [
+   {
+    "src": "S11",
+    "section": "The Proper Ski Stance"
+   },
+   {
+    "src": "S11",
+    "section": "How to do a Wedge Turn"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B13",
+  "pattern": "B",
+  "no": 13,
+  "category": "スキー滑走・安全",
+  "safety": true,
+  "statement": "見通しの悪い狭い場所で転倒した場合、負傷等で移動できない状態でなければ、できるだけ速やかに通行を妨げない場所へ移る。",
+  "correctAnswer": true,
+  "explanation": "狭い場所や見通しの悪い場所で止まっていると、後続者が発見するまでの余裕が小さくなる。転倒後、自力で安全に移動できる場合は、速やかに通行を妨げない場所へ移る。負傷等で移動できない人には無理な移動を求めず、周囲への注意喚起と救助要請を行う。",
+  "learningPoint": "ただし、負傷者の移動を一律に求めず、その状態に応じて救助を要請する。",
+  "researchKeywords": [
+   "Rule 6・Rule 9",
+   "第2章12「救助義務」"
+  ],
+  "sources": [
+   {
+    "src": "S07",
+    "section": "Rule 6・Rule 9"
+   },
+   {
+    "src": "S08",
+    "section": "第2章12「救助義務」"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B14",
+  "pattern": "B",
+  "no": 14,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "スノーパークでジャンプを始める前には、着地点を含む前方の安全を確認する。",
+  "correctAnswer": true,
+  "explanation": "ジャンプでは、踏み切り付近だけが空いていても、着地先に人や障害物があれば衝突する可能性がある。開始前に着地点とその周囲まで確認し、スノーパークの掲示や利用順序等のルールに従う。前の人が滑り出したことだけを安全確認の代わりにしない。",
+  "learningPoint": "ジャンプ開始前の確認範囲には、着地点とその周囲も含める。",
+  "researchKeywords": [
+   "第2章7「スノーパーク利用上の義務」"
+  ],
+  "sources": [
+   {
+    "src": "S08",
+    "section": "第2章7「スノーパーク利用上の義務」"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B15",
+  "pattern": "B",
+  "no": 15,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "初歩のプルークターンは、脚や足で板の向きを調整せず、上半身を大きく振り回すことを基本とする。",
+  "correctAnswer": false,
+  "explanation": "初歩のプルークターンでは、脚と足を使って板の向きを調整し、ターン方向に応じて外側のスキーへの荷重を調整する。上半身を大きく振り回すことを、基本となる操作方法とはしない。板の形、脚の操作、足元のバランスを組み合わせて理解する。",
+  "learningPoint": "初歩のプルークターンは、脚・足による板の方向調整と適切な荷重を基本とする。",
+  "researchKeywords": [
+   "How to do a Wedge Turn"
+  ],
+  "sources": [
+   {
+    "src": "S11",
+    "section": "How to do a Wedge Turn"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B16",
+  "pattern": "B",
+  "no": 16,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト2級には、不整地を含む斜面でのパラレルターン・小回りが独立した必須種目として含まれる。",
+  "correctAnswer": false,
+  "explanation": "不整地を含む斜面のパラレルターン・小回りは、採用版では1級の種目である。2級はベーシックパラレルターンの大回り・小回りと、シュテムターンの3種目で構成される。「小回り」という共通語だけで、1級と2級の種目を同一視しない。",
+  "learningPoint": "2級には、不整地を含むパラレルターン・小回りの独立した必須種目はない。",
+  "researchKeywords": [
+   "PDF1頁・Ⅱ2(1)①a",
+   "PDF2頁・②a"
+  ],
+  "sources": [
+   {
+    "src": "S13",
+    "section": "PDF1頁・Ⅱ2(1)①a"
+   },
+   {
+    "src": "S13",
+    "section": "PDF2頁・②a"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B17",
+  "pattern": "B",
+  "no": 17,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト2級のベーシックパラレルターン・小回りに指定されている斜面は、ナチュラル・中斜面である。",
+  "correctAnswer": true,
+  "explanation": "採用版の2級では、ベーシックパラレルターン・小回りの指定斜面はナチュラル・中斜面である。同じ2級の大回りはナチュラル・中急斜面で、シュテムターンはナチュラル・中斜面となる。種目名と斜面条件を一組として確認する。",
+  "learningPoint": "2級小回りは「ナチュラル・中斜面」であり、大回りの斜度区分とは異なる。",
+  "researchKeywords": [
+   "PDF2頁・Ⅱ2(1)②a 2級の種目・斜面"
+  ],
+  "sources": [
+   {
+    "src": "S13",
+    "section": "PDF2頁・Ⅱ2(1)②a 2級の種目・斜面"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B18",
+  "pattern": "B",
+  "no": 18,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト1級の事前講習修了証は、一度取得すれば翌年度以降も同じものを使い続けられる。",
+  "correctAnswer": false,
+  "explanation": "1級の事前講習修了証は、受講した年度のみ有効と定められている。一度受講した経験があることと、受検年度に有効な修了証を持っていることは別である。翌年度以降に受検する場合は、その年度の条件を満たす講習修了を確認する。",
+  "learningPoint": "事前講習修了証の有効期間は受講年度のみで、翌年度以降へ自動的に持ち越せない。",
+  "researchKeywords": [
+   "PDF3頁右欄・第20条(3)修了証の有効期間"
+  ],
+  "sources": [
+   {
+    "src": "S12",
+    "section": "PDF3頁右欄・第20条(3)修了証の有効期間"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B19",
+  "pattern": "B",
+  "no": 19,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト1級では、受検までに1単位・2時間の事前講習を修了し、修了証で確認できることが求められる。",
+  "correctAnswer": true,
+  "explanation": "1級では、テストを受けるまでに1単位・2時間の事前講習を修了し、修了証で示す条件が定められている。講習時間を満たすことだけでなく、受検前に修了していること、修了証が当該受講年度に有効であることを合わせて確認する。",
+  "learningPoint": "必要な時間・受検前の修了・修了証による証明の3点を確認する。",
+  "researchKeywords": [
+   "PDF3頁右欄・第20条(2)事前講習"
+  ],
+  "sources": [
+   {
+    "src": "S12",
+    "section": "PDF3頁右欄・第20条(2)事前講習"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "B20",
+  "pattern": "B",
+  "no": 20,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト2級で、各種目の確定した取得ポイントが64・65・66だった場合、64の種目があるため不合格となる。",
+  "correctAnswer": false,
+  "explanation": "確定した3種目の取得ポイントを足すと、64＋65＋66＝195となり、2級の得点基準195以上を満たす。各種目がすべて65以上であることを個別に求める規定ではない。ここでの得点上の合格と、受検・公認等の手続き条件は区別して扱う。",
+  "learningPoint": "この得点例は合計195ポイントであり、2級の得点による合格基準を満たす。",
+  "researchKeywords": [
+   "PDF2頁・Ⅱ2(1)②c 2級の合否判定"
+  ],
+  "sources": [
+   {
+    "src": "S13",
+    "section": "PDF2頁・Ⅱ2(1)②c 2級の合否判定"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C01",
+  "pattern": "C",
+  "no": 1,
+  "category": "雪山登山・雪崩",
+  "safety": true,
+  "statement": "雪庇は、空中へ張り出した部分だけが折れるので、見た目の稜線より陸側に立てば崩落に巻き込まれることはない。",
+  "correctAnswer": false,
+  "explanation": "雪庇は風によって稜線の風下側へ張り出して形成されるが、崩れる範囲は目に見える張り出し部分に限らない。亀裂や破断が稜線より風上側へ及ぶ場合があり、見た目では地面に支えられているように見える場所も崩落に巻き込まれ得る。外見だけで安全な境界を決めず、雪庇に近づかない経路を選ぶ。",
+  "learningPoint": "雪庇は見た目の稜線より風上側から破断する場合もあるため、陸側に見える場所でも安全とは限らない。",
+  "researchKeywords": [
+   "雪庇・稜線上の危険"
+  ],
+  "sources": [
+   {
+    "src": "S04",
+    "section": "雪庇・稜線上の危険"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C02",
+  "pattern": "C",
+  "no": 2,
+  "category": "雪山登山・雪崩",
+  "safety": true,
+  "statement": "斜面に樹木が生えていれば、その樹木が雪を固定するため、雪崩の危険はない。",
+  "correctAnswer": false,
+  "explanation": "樹木が積雪を支える働きは、樹木の密度・太さ・積雪の深さなどによって変わる。樹林内でも雪崩が発生する場合があり、上方の開けた斜面で発生した雪崩が樹林内へ流入することもある。木があるかどうかだけではなく、斜面・積雪・上方の地形を合わせて確認する。",
+  "learningPoint": "樹木が生えている斜面でも、雪崩の発生や上方からの流入の危険は否定できない。",
+  "researchKeywords": [
+   "斜面",
+   "アンカー"
+  ],
+  "sources": [
+   {
+    "src": "S04",
+    "section": "斜面"
+   },
+   {
+    "src": "S04",
+    "section": "アンカー"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C03",
+  "pattern": "C",
+  "no": 3,
+  "category": "雪山登山・雪崩",
+  "safety": false,
+  "statement": "表層雪崩と全層雪崩の区別は、積雪の途中の面から滑るか、地面までの積雪全体が滑るかという点にある。",
+  "correctAnswer": true,
+  "explanation": "表層雪崩は積雪内部に滑り面があり、その上の雪が動く雪崩である。全層雪崩は地面との境界を滑り面として、その場所の積雪全体が動く雪崩である。この分類は滑り面の位置に基づくため、乾いた雪か湿った雪か、冬か春かだけで区別するものではない。",
+  "learningPoint": "分類の基準は「積雪内部から滑るか、地面までの積雪全体が滑るか」である。",
+  "researchKeywords": [
+   "表層雪崩と全層雪崩"
+  ],
+  "sources": [
+   {
+    "src": "S03",
+    "section": "表層雪崩と全層雪崩"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C04",
+  "pattern": "C",
+  "no": 4,
+  "category": "雪山登山・雪崩",
+  "safety": true,
+  "statement": "雪崩の危険がある地形で仲間を待つ場合は、全員が同じ危険範囲内にまとまるほど、被害を小さくできる。",
+  "correctAnswer": false,
+  "explanation": "同じ危険範囲に全員が集まると、一度の雪崩で多数が巻き込まれ、救助を行える仲間まで失われる可能性がある。まず危険地形を避け、待機場所を雪崩の流入が想定される範囲から外す。人数や通過時刻の調整は危険への同時曝露を減らすための対策であり、危険な斜面の通過を安全に変える保証ではない。",
+  "learningPoint": "危険範囲内に全員でまとまらず、待機場所と行動方法を見直し、同時に危険へさらされる人数を抑える。",
+  "researchKeywords": [
+   "リスク",
+   "危険への曝露を減らす行動"
+  ],
+  "sources": [
+   {
+    "src": "S02",
+    "section": "リスク"
+   },
+   {
+    "src": "S02",
+    "section": "危険への曝露を減らす行動"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C05",
+  "pattern": "C",
+  "no": 5,
+  "category": "雪山登山・雪崩",
+  "safety": false,
+  "statement": "持続性の弱層は、降雪が終わってしばらくたった後にも残り、人の荷重で雪崩が誘発される原因となる場合がある。",
+  "correctAnswer": true,
+  "explanation": "持続性の弱層は、降雪が終わった後も積雪内部に残り、上の雪を十分に支えられない状態が続くことがある。人の荷重などで弱層が壊れ、その破壊が広がると、上の雪がまとまって動き出す。時間が経過したことや先行者が無事に通過したことだけでは、弱層の影響が消えたと判断できない。",
+  "learningPoint": "降雪後も残る弱層と、人の荷重による雪崩の誘発を考慮する。",
+  "researchKeywords": [
+   "持続性の弱層を持つスラブ"
+  ],
+  "sources": [
+   {
+    "src": "S05",
+    "section": "持続性の弱層を持つスラブ"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C06",
+  "pattern": "C",
+  "no": 6,
+  "category": "雪山登山・雪崩",
+  "safety": false,
+  "statement": "冬山装備の標準的な一覧は、登る山、ルート、難度、行動形態に合わせて調整して使用する。",
+  "correctAnswer": true,
+  "explanation": "装備一覧は準備漏れを確認するための基準であり、すべての山行に同じ装備が適するという意味ではない。山域・ルート・難度・行動時間・宿泊形態・予想する気象を照合し、必要な装備と扱える技能を確認する。装備をそろえたことだけで、計画の難度や危険に対応できるとは判断しない。",
+  "learningPoint": "標準的な一覧を出発点とし、実際の山行条件に合わせて装備を選定・調整する。",
+  "researchKeywords": [
+   "PDF2頁冬山装備一覧と使用上の注記"
+  ],
+  "sources": [
+   {
+    "src": "S01",
+    "section": "PDF2頁冬山装備一覧と使用上の注記"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C07",
+  "pattern": "C",
+  "no": 7,
+  "category": "雪山登山・雪崩",
+  "safety": true,
+  "statement": "雪崩ビーコン・プローブ・ショベルを購入して携行すれば、捜索や掘り出しの操作練習は省略できる。",
+  "correctAnswer": false,
+  "explanation": "ビーコンは埋没者の位置を探すため、プローブは雪中の位置を確認するため、ショベルは掘り出すために用いる。これらは連続した救助活動で使うため、購入・携行だけでは操作や連携の技能を身につけたことにならない。グループ全員が、実際の用具を使う訓練を受け、反復して操作を確認する。",
+  "learningPoint": "ビーコン・プローブ・ショベルの携行に加え、各用具を連携して使う操作練習を行う。",
+  "researchKeywords": [
+   "救助用具・仲間全員による救助訓練"
+  ],
+  "sources": [
+   {
+    "src": "S06",
+    "section": "救助用具・仲間全員による救助訓練"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C08",
+  "pattern": "C",
+  "no": 8,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "停止状態からコースへ合流するときは、上方から滑走してくる人の動きを確認し、その通行を妨げないようにする。",
+  "correctAnswer": true,
+  "explanation": "停止中の人が動き始めると、上方から滑ってくる人の進路へ突然入り込むことがある。合流する側は上方の利用者の動きを確認し、通行を妨げない時機を選ぶ。FISの行動規範では、コースへの進入や再出発時は下方の確認も求めており、上方だけを見ればよいという意味ではない。",
+  "learningPoint": "上方の通行を妨げないことに加え、下方も確認してから合流する。",
+  "researchKeywords": [
+   "第2章6(1)合流・再出発",
+   "第5項"
+  ],
+  "sources": [
+   {
+    "src": "S08",
+    "section": "第2章6(1)合流・再出発"
+   },
+   {
+    "src": "S07",
+    "section": "第5項"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C09",
+  "pattern": "C",
+  "no": 9,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "圧雪車のすぐ後ろは整備された雪面になっているため、車両の直後へ接近して追走するのが安全である。",
+  "correctAnswer": false,
+  "explanation": "圧雪された雪面に見えることと、作業車両の近くを安全に滑れることは別である。作業中の圧雪車に接近すると、車両との接触や進路の干渉につながる。整備直後の雪面を利用しようとして追走せず、車両の作業を妨げない位置で減速・停止し、係員の指示に従う。",
+  "learningPoint": "圧雪車の直後へ接近して追走せず、車両から離れ、作業と通行を妨げないようにする。",
+  "researchKeywords": [
+   "第2章4接近等の禁止",
+   "6(4)作業車両等への配慮"
+  ],
+  "sources": [
+   {
+    "src": "S08",
+    "section": "第2章4接近等の禁止"
+   },
+   {
+    "src": "S08",
+    "section": "6(4)作業車両等への配慮"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C10",
+  "pattern": "C",
+  "no": 10,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "衝突事故を目撃しただけの人は、当事者でなければ氏名や連絡先を伝える必要はない。",
+  "correctAnswer": false,
+  "explanation": "FISの行動規範第10項は、事故の当事者だけでなく目撃者にも氏名・住所の交換を求めている。国内のスノースポーツ安全基準でも、目撃者を含めた連絡先等の確認を扱っている。事故の経過を確認できるよう、パトロール等に目撃内容と連絡先を伝える。「当事者でない」ことは情報提供を省略する理由にならない。",
+  "learningPoint": "衝突事故の目撃者も、事故対応に必要な氏名・連絡先等をパトロールなどへ伝える。",
+  "researchKeywords": [
+   "第10項身元情報",
+   "第2章12事故対応"
+  ],
+  "sources": [
+   {
+    "src": "S07",
+    "section": "第10項身元情報"
+   },
+   {
+    "src": "S08",
+    "section": "第2章12事故対応"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C11",
+  "pattern": "C",
+  "no": 11,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "階段登行では、左右のスキーを平行にし、フォールラインを横切る向きに置いて横歩きする。",
+  "correctAnswer": true,
+  "explanation": "階段登行では、2本のスキーを平行にし、斜面の最大傾斜方向であるフォールラインを横切る向きに置く。山側のエッジで雪面をとらえ、横向きに一歩ずつ上がる。スキーの先端を開いて正面向きに登る開脚登行とは、板の向きと登り方が異なる。",
+  "learningPoint": "「平行な板で横歩きする階段登行」と「逆ハの字で登る開脚登行」を区別する。",
+  "researchKeywords": [
+   "How to Get Up a Hill",
+   "Side-Stepping"
+  ],
+  "sources": [
+   {
+    "src": "S11",
+    "section": "How to Get Up a Hill"
+   },
+   {
+    "src": "S11",
+    "section": "Side-Stepping"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C12",
+  "pattern": "C",
+  "no": 12,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "初歩のプルークターンで右へ曲がるとき、ターンの外側に当たるのは右スキーである。",
+  "correctAnswer": false,
+  "explanation": "外スキー・内スキーは、右足か左足かで固定する名称ではなく、ターンの中心に対して外側か内側かを表す。右へ曲がるターンでは、中心側が右、外側が左になるため、外スキーは左スキーである。左ターンでは反対に右スキーが外側になる。",
+  "learningPoint": "初歩のプルークターンで右へ曲がるとき、ターンの外側に当たるのは左スキーである。",
+  "researchKeywords": [
+   "How to Turn on Skis",
+   "外スキーへの荷重"
+  ],
+  "sources": [
+   {
+    "src": "S11",
+    "section": "How to Turn on Skis"
+   },
+   {
+    "src": "S11",
+    "section": "外スキーへの荷重"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C13",
+  "pattern": "C",
+  "no": 13,
+  "category": "スキー滑走・安全",
+  "safety": true,
+  "statement": "深雪では、大木の幹のすぐそばは平らで安定しているので、休憩場所として優先的に選ぶ。",
+  "correctAnswer": false,
+  "explanation": "深雪の大木の根元付近には、枝の下へ雪が積もりにくいことなどにより、空洞状のくぼみが生じる場合がある。そこへ落ちると、周囲の雪に埋まり自力で抜け出せなくなる危険がある。見た目が平らでも足元の支持を保証できないため、幹の近くを休憩場所として選ばない。",
+  "learningPoint": "深雪では大木の幹の周囲にくぼみや埋没の危険があるため、不用意に近づかず、別の安全な場所で休憩する。",
+  "researchKeywords": [
+   "第2章6(6)深雪・大木周囲の危険"
+  ],
+  "sources": [
+   {
+    "src": "S08",
+    "section": "第2章6(6)深雪・大木周囲の危険"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C14",
+  "pattern": "C",
+  "no": 14,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "ゲレンデで斜面の上方へ動き始める場合も、上下の利用者を確認し、他者と干渉しないことを確かめる。",
+  "correctAnswer": true,
+  "explanation": "滑走の流れと異なる上向きの移動では、上方から来る人にも、下方にいる人にも進路が重なる場合がある。FISの第5項は、コースへの進入・停止後の再出発に加え、斜面を上方へ動く場合も上下を確認する対象としている。確認したうえで、他者の進路へ急に入り込まないように動く。",
+  "learningPoint": "上方へ動き始めるときも、上下の安全確認を省略しない。",
+  "researchKeywords": [
+   "第5項進入・再出発・上方への移動"
+  ],
+  "sources": [
+   {
+    "src": "S07",
+    "section": "第5項進入・再出発・上方への移動"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C15",
+  "pattern": "C",
+  "no": 15,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "スキーの流れ止めは、外れた板をなくさないためだけでなく、板が他者に衝突するのを防ぐためにも用いる。",
+  "correctAnswer": true,
+  "explanation": "外れたスキーは斜面を流れ、人や施設に衝突することがある。流れ止めの目的は紛失防止だけではなく、この流走による他者への危害を防ぐことにもある。用具に適した流れ止めを備え、正しく機能する状態で使用する。緩斜面や短い練習だからという理由で省略しない。",
+  "learningPoint": "スキーの流れ止めは、板の流走による他者への危害の防止にも用いる。",
+  "researchKeywords": [
+   "スキー場からのお願い・流れ止め"
+  ],
+  "sources": [
+   {
+    "src": "S09",
+    "section": "スキー場からのお願い・流れ止め"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C16",
+  "pattern": "C",
+  "no": 16,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト3級は、講習の中で運動課題の到達度を評価する方式である。",
+  "correctAnswer": true,
+  "explanation": "採用版の実施要領では、3級以下は講習内テストとして、講習の中で運動課題の到達度を評価する。実際の滑走に対する評価であり、講習へ出席するだけで自動的に合格する制度ではない。1・2級の実技テスト方式や、本教材のWebによる知識テストと区別する。",
+  "learningPoint": "3級は講習内の実際の滑走を通じて、運動課題への到達度を評価する。",
+  "researchKeywords": [
+   "PDF1頁・Ⅱ2(1)本文",
+   "PDF2頁・③b講習内の評価"
+  ],
+  "sources": [
+   {
+    "src": "S13",
+    "section": "PDF1頁・Ⅱ2(1)本文"
+   },
+   {
+    "src": "S13",
+    "section": "PDF2頁・③b講習内の評価"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C17",
+  "pattern": "C",
+  "no": 17,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト3級の2種目は、いずれも不整地の急斜面で実施することが指定されている。",
+  "correctAnswer": false,
+  "explanation": "3級の指定種目はベーシックパラレルターンとシュテムボーゲンで、どちらも整地の緩～中斜面で実施する。したがって「不整地の急斜面」という説明は、雪面条件と斜度区分の両方が異なる。種目名だけでなく、その種目に指定された斜面条件も一組にして確認する。",
+  "learningPoint": "SAJ級別テスト3級の2種目は、いずれも整地の緩～中斜面で実施する。",
+  "researchKeywords": [
+   "PDF2頁・Ⅱ2(1)③a 3級の種目・斜面"
+  ],
+  "sources": [
+   {
+    "src": "S13",
+    "section": "PDF2頁・Ⅱ2(1)③a 3級の種目・斜面"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C18",
+  "pattern": "C",
+  "no": 18,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト3級の種目は、ベーシックパラレルターンとシュテムボーゲンである。",
+  "correctAnswer": true,
+  "explanation": "採用版の実施要領に示された3級の2種目は、ベーシックパラレルターンとシュテムボーゲンである。指定斜面はどちらも整地の緩～中斜面で、講習内テストとして評価する。2級の3種目に含まれる「シュテムターン」と、3級の「シュテムボーゲン」を混同しない。",
+  "learningPoint": "3級は「ベーシックパラレルターン」「シュテムボーゲン」の2種目である。",
+  "researchKeywords": [
+   "PDF2頁・Ⅱ2(1)③a 3級の種目"
+  ],
+  "sources": [
+   {
+    "src": "S13",
+    "section": "PDF2頁・Ⅱ2(1)③a 3級の種目"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C19",
+  "pattern": "C",
+  "no": 19,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テストでは、得点で合格基準を満たすことと、公認料の納入等を経て公認として有効になることは、区別して確認する。",
+  "correctAnswer": true,
+  "explanation": "得点による合格基準を満たすことと、認定に伴う所定の手続きを終えることは別に確認する。採用版の規程第22条は、合格者の公認料納入、合格証・バッジの交付を定めている。1級では未登録者の会員登録等も関係するため、点数だけを見てすべての手続きが完了したとは判断しない。",
+  "learningPoint": "得点上の合格を確認した後、公認料や交付・登録に関する所定手続きを確認する。",
+  "researchKeywords": [
+   "PDF3頁右欄・第22条",
+   "PDF2頁・Ⅱ2(1)①d"
+  ],
+  "sources": [
+   {
+    "src": "S12",
+    "section": "PDF3頁右欄・第22条"
+   },
+   {
+    "src": "S13",
+    "section": "PDF2頁・Ⅱ2(1)①d"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "C20",
+  "pattern": "C",
+  "no": 20,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト1級で、確定した4種目の取得ポイントの合計が279だった場合、合計を四捨五入して280とし、合格となる。",
+  "correctAnswer": false,
+  "explanation": "1級の得点による合格基準は、4種目の取得ポイントの合計280以上である。279は基準に1ポイント不足する。実施要領にある四捨五入は、検定員の評価を平均して各種目の取得ポイントを求める際の処理であり、確定した合計点を都合よく280へ切り上げる規定ではない。",
+  "learningPoint": "確定した4種目の合計が279ポイントの場合、1級の得点による合格基準280以上を満たさない。",
+  "researchKeywords": [
+   "PDF1頁・Ⅱ2(1)①b",
+   "PDF2頁・①c"
+  ],
+  "sources": [
+   {
+    "src": "S13",
+    "section": "PDF1頁・Ⅱ2(1)①b"
+   },
+   {
+    "src": "S13",
+    "section": "PDF2頁・①c"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D01",
+  "pattern": "D",
+  "no": 1,
+  "category": "雪山登山・雪崩",
+  "safety": true,
+  "statement": "崖の上では、小さな雪崩でも人を押し流して転落につなげる可能性がある。",
+  "correctAnswer": true,
+  "explanation": "雪崩による被害は雪の量だけで決まらず、流された先の地形にも左右される。崖の上や急な落ち込みの近くでは、少量の雪に足元を取られただけでも転落につながる。雪崩が発生する斜面だけでなく、その下方にある崖・岩・沢など、流された場合の結果まで確認する。",
+  "learningPoint": "小さな雪崩でも、崖や落ち込みと組み合わさると重大な転落事故につながり得る。",
+  "researchKeywords": [
+   "地形的な罠・崖"
+  ],
+  "sources": [
+   {
+    "src": "S04",
+    "section": "地形的な罠・崖"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D02",
+  "pattern": "D",
+  "no": 2,
+  "category": "雪山登山・雪崩",
+  "safety": true,
+  "statement": "日帰りの冬山登山で日没前に下山する計画なら、ヘッドランプや予備電池は準備から外してよい。",
+  "correctAnswer": false,
+  "explanation": "日没前に下山する計画でも、行程の遅れ、道迷い、負傷者への対応などによって暗い時間帯の行動になる場合がある。冬山装備の一覧では、照明となるヘッドランプと予備電池を準備する。予定どおりに行動できることを前提に非常時の装備を省くのではなく、点灯と電池の状態も出発前に確認する。",
+  "learningPoint": "日帰りで日没前に下山する計画でも、ヘッドランプと予備電池を準備する。",
+  "researchKeywords": [
+   "PDF2頁冬山装備一覧"
+  ],
+  "sources": [
+   {
+    "src": "S01",
+    "section": "PDF2頁冬山装備一覧"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D03",
+  "pattern": "D",
+  "no": 3,
+  "category": "雪山登山・雪崩",
+  "safety": true,
+  "statement": "登山者やスキーヤーが入っていない斜面では、自然に雪崩が発生することはない。",
+  "correctAnswer": false,
+  "explanation": "雪崩の発生には、人の荷重がきっかけとなる場合だけでなく、自然に発生する場合もある。新たな雪の堆積、風による雪の移動、気温の変化などによって積雪の安定性は変わる。人がまだ入っていない斜面でも、上方から自然発生した雪崩が到達する可能性を除外できない。",
+  "learningPoint": "登山者やスキーヤーが入っていない斜面でも、降雪や気象・積雪の変化などにより自然に雪崩が発生することがある。",
+  "researchKeywords": [
+   "雪崩の発生・種類",
+   "雪崩問題"
+  ],
+  "sources": [
+   {
+    "src": "S03",
+    "section": "雪崩の発生・種類"
+   },
+   {
+    "src": "S05",
+    "section": "雪崩問題"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D04",
+  "pattern": "D",
+  "no": 4,
+  "category": "雪山登山・雪崩",
+  "safety": false,
+  "statement": "斜面の角度は周囲の地形によって見え方が変わるため、必要に応じて傾斜計等で確かめる。",
+  "correctAnswer": true,
+  "explanation": "斜度の見積もりは、観察する位置や周囲の地形に影響され、見た目だけでは誤差が生じる。傾斜計や地形図などで確認することで、判断の材料を補う。ただし、角度を測れたことだけで安全になるわけではなく、上方の斜面、雪の状態、雪崩の走路や堆積域も合わせて評価する。",
+  "learningPoint": "見た目の斜度だけに頼らず測定等で補い、斜度以外の危険条件も確認する。",
+  "researchKeywords": [
+   "斜面の角度・傾斜の確認"
+  ],
+  "sources": [
+   {
+    "src": "S04",
+    "section": "斜面の角度・傾斜の確認"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D05",
+  "pattern": "D",
+  "no": 5,
+  "category": "雪山登山・雪崩",
+  "safety": false,
+  "statement": "雪崩のリスクを下げる行動には、危険地形へ同時に入る人数と、その場所にとどまる時間を抑えることも含まれる。",
+  "correctAnswer": true,
+  "explanation": "雪崩リスクには、雪崩そのものの発生可能性に加え、人が危険範囲へ入る人数や時間も関係する。まず危険地形を避け、行動が必要な場合も待機場所・経路・間隔を見直し、同時に多数が巻き込まれる状況を減らす。ただし、人数や時間の調整だけで不安定な斜面を安全に通過できるとはいえない。",
+  "learningPoint": "危険地形の回避を優先し、人数・滞在時間を含む危険への曝露を抑える。",
+  "researchKeywords": [
+   "リスク",
+   "危険への曝露の管理"
+  ],
+  "sources": [
+   {
+    "src": "S02",
+    "section": "リスク"
+   },
+   {
+    "src": "S02",
+    "section": "危険への曝露の管理"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D06",
+  "pattern": "D",
+  "no": 6,
+  "category": "雪山登山・雪崩",
+  "safety": false,
+  "statement": "管理区域外を滑るバックカントリースキーには、滑走技術に加え、冬山に関する知識・技術・装備が求められる。",
+  "correctAnswer": true,
+  "explanation": "バックカントリーは、管理されたゲレンデと同じ安全確保や案内を前提にできない。滑走技術に加え、冬山の行動計画、気象・地形・積雪の判断、位置確認、緊急時の連絡や救助への備えが求められる。雪崩救助用具を持つだけでは十分でなく、使う訓練と、危険な条件では行かない判断も伴う。",
+  "learningPoint": "管理区域外の滑走には、冬山に関する知識・技術・装備と、それらを用いた行動判断が伴う。",
+  "researchKeywords": [
+   "PDF4頁バックカントリー",
+   "雪崩予防と救助への備え"
+  ],
+  "sources": [
+   {
+    "src": "S01",
+    "section": "PDF4頁バックカントリー"
+   },
+   {
+    "src": "S06",
+    "section": "雪崩予防と救助への備え"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D07",
+  "pattern": "D",
+  "no": 7,
+  "category": "雪山登山・雪崩",
+  "safety": true,
+  "statement": "雨や日射によって雪に水分が増えると雪は重くなるため、湿った雪では雪崩は起こらなくなる。",
+  "correctAnswer": false,
+  "explanation": "水分が増えると雪が重くなることだけを見て、安全になるとは判断できない。雨や融雪水によって雪粒同士の結合が弱まるなど、積雪の安定性が低下し、湿雪の雪崩につながる場合がある。湿った雪の雪崩にも巻き込まれる危険があり、日射や気温、降雨による変化を確認する。",
+  "learningPoint": "雨や日射等による水分の増加で積雪が不安定になり、湿雪の雪崩が起こることがある。",
+  "researchKeywords": [
+   "湿雪の雪崩・雪粒間の結合"
+  ],
+  "sources": [
+   {
+    "src": "S03",
+    "section": "湿雪の雪崩・雪粒間の結合"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D08",
+  "pattern": "D",
+  "no": 8,
+  "category": "スキー滑走・安全",
+  "safety": true,
+  "statement": "スキー場の外周境界の内側であれば、指定されたコースを外れた斜面でも自由に滑走できる。",
+  "correctAnswer": false,
+  "explanation": "スキー場の外周の内側であることは、すべての斜面が滑走可能なコースであることを意味しない。コース外や閉鎖区画には、施設が立入り・滑走を認めていない場所がある。場内地図に加え、その時点の標識・掲示・放送・係員の指示を確認し、許可された範囲を利用する。",
+  "learningPoint": "スキー場の外周境界の内側でも、コース外や立入禁止・閉鎖された斜面を自由に滑走できるわけではない。",
+  "researchKeywords": [
+   "コース外・閉鎖区域への立入りと施設の指示"
+  ],
+  "sources": [
+   {
+    "src": "S09",
+    "section": "コース外・閉鎖区域への立入りと施設の指示"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D09",
+  "pattern": "D",
+  "no": 9,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "適切な滑走速度は、本人の技量だけでなく、地形・雪面・天候・混雑の状況によっても変わる。",
+  "correctAnswer": true,
+  "explanation": "FISの行動規範第2項では、速度と滑り方を本人の能力だけでなく、地形、雪面、天候、利用者の多さに合わせる。滑り慣れたコースでも、視界や混雑が変われば、危険を発見して停止・回避するための余裕が変わる。「自分は上級者だから」という理由で周囲の条件を無視しない。",
+  "learningPoint": "本人の技量と、その時点の地形・雪面・天候・混雑を合わせて速度を調整する。",
+  "researchKeywords": [
+   "第2項速度と滑り方の制御"
+  ],
+  "sources": [
+   {
+    "src": "S07",
+    "section": "第2項速度と滑り方の制御"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D10",
+  "pattern": "D",
+  "no": 10,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "板を外してゲレンデを歩いて下るときは、上方から見えやすいよう、コース中央を歩くのが原則である。",
+  "correctAnswer": false,
+  "explanation": "FISの行動規範第7項では、歩いて斜面を上り下りする人はコースの端を利用する。中央を歩くと滑走者の進路を妨げ、接触の原因になる。端であっても立入禁止箇所などへ入らず、周囲を確認する。負傷等により歩行が難しい場合は、無理に下らず係員やパトロールへ支援を求める。",
+  "learningPoint": "板を外してゲレンデを歩いて下るときは、原則としてコースの端を利用し、滑走者の通行を妨げない。",
+  "researchKeywords": [
+   "第7項徒歩での上り下り",
+   "事故対応"
+  ],
+  "sources": [
+   {
+    "src": "S07",
+    "section": "第7項徒歩での上り下り"
+   },
+   {
+    "src": "S08",
+    "section": "事故対応"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D11",
+  "pattern": "D",
+  "no": 11,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "追越し前に声をかければ、相手は進路を変えない義務を負うため、十分な横の間隔を取らなくてもよい。",
+  "correctAnswer": false,
+  "explanation": "追越し側は、相手の意図した動きにも不意の動きにも対応できる空間を残す。声をかけても、相手が聞こえたとは限らず、その後の進路が固定されるわけでもない。したがって、声かけは安全な間隔の代わりにはならず、十分な余裕が取れなければ追越しを控える。",
+  "learningPoint": "追越し前に声をかけた場合でも、相手の不意の動きに対応できる十分な間隔を確保する。",
+  "researchKeywords": [
+   "第4項追越し"
+  ],
+  "sources": [
+   {
+    "src": "S07",
+    "section": "第4項追越し"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D12",
+  "pattern": "D",
+  "no": 12,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "開脚登行では、スキーのトップを外側に開き、テール側を近づけた逆ハの字の形を用いる。",
+  "correctAnswer": true,
+  "explanation": "開脚登行では斜面の上方を向き、スキーのトップを左右に開いて、テール側を近づけた逆ハの字にする。内側のエッジで雪面をとらえ、一歩ずつ登る。滑走時の基本的なプルークはトップを近づけ、テールを開くため、板の開き方が逆である。",
+  "learningPoint": "開脚登行は「トップを開く逆ハの字」、プルークは「テールを開くハの字」である。",
+  "researchKeywords": [
+   "How to Get Up a Hill",
+   "Herringbone"
+  ],
+  "sources": [
+   {
+    "src": "S11",
+    "section": "How to Get Up a Hill"
+   },
+   {
+    "src": "S11",
+    "section": "Herringbone"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D13",
+  "pattern": "D",
+  "no": 13,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "事故を発見したら、自分の安全にも配慮しながら、場所と状況をパトロール等へ正確に伝え、可能な範囲で救助に協力する。",
+  "correctAnswer": true,
+  "explanation": "事故に気づいたら、まず自分が新たな衝突などに巻き込まれない位置で状況を確認し、場所と事故の様子をパトロール等へ伝える。救助には可能な範囲で協力するが、二次事故を招く行動や、負傷者の状態を確認しない無理な移動は避ける。救助要請と現場の安全確保を合わせて行う。",
+  "learningPoint": "自分と周囲の安全を確保し、正確な通報と可能な範囲の救助協力を行う。",
+  "researchKeywords": [
+   "第2章12事故発生時の対応",
+   "第9項救助"
+  ],
+  "sources": [
+   {
+    "src": "S08",
+    "section": "第2章12事故発生時の対応"
+   },
+   {
+    "src": "S07",
+    "section": "第9項救助"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D14",
+  "pattern": "D",
+  "no": 14,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "基本姿勢を安定させるには、進行方向よりも左右のスキートップだけを見続ける。",
+  "correctAnswer": false,
+  "explanation": "足元やスキートップだけを見続けると、進行方向の地形や他の利用者の発見が遅れる。基本姿勢では足元の上でバランスを取りながら、これから進む方向を見て周囲を把握する。用具を確認する必要がある場合も、安全な場所で停止して確認するなど、滑走中の前方確認と両立させる。",
+  "learningPoint": "基本姿勢ではスキートップだけを見続けず、進行方向を見て地形と周囲の利用者を確認する。",
+  "researchKeywords": [
+   "Proper Ski Stance",
+   "進行方向を見る"
+  ],
+  "sources": [
+   {
+    "src": "S11",
+    "section": "Proper Ski Stance"
+   },
+   {
+    "src": "S11",
+    "section": "進行方向を見る"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D15",
+  "pattern": "D",
+  "no": 15,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "スキーの指導者は、滑走動作だけでなく、コースのルールや事故を防ぐ行動も受講者に説明する。",
+  "correctAnswer": true,
+  "explanation": "指導者の説明範囲は、ターンや停止の動作だけではない。スノースポーツ安全基準では、受講者へ滑走ルールを伝え、能力に合った場所と方法で指導することを扱っている。停止場所、合流時の確認、他者との間隔なども説明し、受講者自身がルールを守って行動できるようにする。",
+  "learningPoint": "滑走技術とともに、コースのルールや事故を防ぐ行動を指導する。",
+  "researchKeywords": [
+   "第2章8指導者・9講習受講者"
+  ],
+  "sources": [
+   {
+    "src": "S08",
+    "section": "第2章8指導者・9講習受講者"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D16",
+  "pattern": "D",
+  "no": 16,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "この大学実習用のWeb問題で100点を取れば、雪上で評価を受けなくても、SAJ級別テスト3級の正式な認定に置き換えられる。",
+  "correctAnswer": false,
+  "explanation": "このWeb問題は、大学実習で安全やスキーに関する知識を確認するための課題である。SAJの3級は、所定の講習内テストで実際の滑走の到達度を評価する制度であり、知識問題の得点とは評価対象も手続きも異なる。100点を取っても、雪上での技能評価や正式な公認手続きの代わりにはならない。",
+  "learningPoint": "大学実習用Web問題の得点を、SAJ級別テスト3級の実技評価や正式認定に置き換えることはできない。",
+  "researchKeywords": [
+   "PDF3頁右欄・第19～22条",
+   "PDF2頁・Ⅱ2(1)③b"
+  ],
+  "sources": [
+   {
+    "src": "S12",
+    "section": "PDF3頁右欄・第19～22条"
+   },
+   {
+    "src": "S13",
+    "section": "PDF2頁・Ⅱ2(1)③b"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D17",
+  "pattern": "D",
+  "no": 17,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト1級で、各種目の確定ポイントが68・70・70・72なら、68の種目があるため得点基準上は不合格となる。",
+  "correctAnswer": false,
+  "explanation": "確定した4種目の取得ポイントの合計は、68＋70＋70＋72＝280である。採用版の1級の得点基準は合計280以上で、すべての種目が個別に70以上であることを条件にしていない。この例は得点基準を満たすが、受検資格や事前講習、公認等の条件は別に確認する。",
+  "learningPoint": "この得点例は合計280ポイントとなるため、1級の得点による合格基準を満たす。",
+  "researchKeywords": [
+   "PDF2頁・Ⅱ2(1)①c 1級の合否判定"
+  ],
+  "sources": [
+   {
+    "src": "S13",
+    "section": "PDF2頁・Ⅱ2(1)①c 1級の合否判定"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D18",
+  "pattern": "D",
+  "no": 18,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト1級のベーシックパラレルターン・小回りは、ナチュラル・急斜面で実施する。",
+  "correctAnswer": true,
+  "explanation": "1級のベーシックパラレルターン・小回りの指定斜面は、ナチュラル・急斜面である。別種目であるパラレルターン・小回りは、不整地を含むナチュラル・中急斜面で実施する。どちらも小回りだが、種目名と斜面条件が異なるため、単に「小回り」とまとめて覚えない。",
+  "learningPoint": "1級の「ベーシックパラレルターン・小回り」は、ナチュラル・急斜面である。",
+  "researchKeywords": [
+   "PDF1頁・Ⅱ2(1)①a 1級の種目・斜面"
+  ],
+  "sources": [
+   {
+    "src": "S13",
+    "section": "PDF1頁・Ⅱ2(1)①a 1級の種目・斜面"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D19",
+  "pattern": "D",
+  "no": 19,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト2級には、ベーシックパラレルターンの大回り・小回りに加えて、総合滑降が指定されている。",
+  "correctAnswer": false,
+  "explanation": "2級は、ベーシックパラレルターン・大回り、ベーシックパラレルターン・小回り、シュテムターンの3種目で構成される。総合滑降は採用版の1級に含まれる種目であり、2級の3番目の種目ではない。種目数が同じかどうかだけでなく、名称を正確に確認する。",
+  "learningPoint": "SAJ級別テスト2級は、ベーシックパラレルターンの大回り・小回りと、シュテムターンの3種目である。",
+  "researchKeywords": [
+   "PDF2頁・Ⅱ2(1)②a 2級の種目"
+  ],
+  "sources": [
+   {
+    "src": "S13",
+    "section": "PDF2頁・Ⅱ2(1)②a 2級の種目"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "D20",
+  "pattern": "D",
+  "no": 20,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト1級の合格者がSAJ未登録の場合、当該年度の会員登録等の所定手続きも確認する。",
+  "correctAnswer": true,
+  "explanation": "採用版の実施要領は、1級合格者が当該年度のSAJ会員登録をしていない場合、会員登録または暫定会員登録を行うことを定めている。得点上の合格を確認した後も、未登録のまま手続きが完了したとは判断しない。公認料や必要な登録方法について、開催団体の案内に従って確認する。",
+  "learningPoint": "1級合格者が未登録の場合は、当該年度の会員登録等の所定手続きを確認する。",
+  "researchKeywords": [
+   "PDF3頁右欄・第22条",
+   "PDF2頁・Ⅱ2(1)①d"
+  ],
+  "sources": [
+   {
+    "src": "S12",
+    "section": "PDF3頁右欄・第22条"
+   },
+   {
+    "src": "S13",
+    "section": "PDF2頁・Ⅱ2(1)①d"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E01",
+  "pattern": "E",
+  "no": 1,
+  "category": "雪山登山・雪崩",
+  "safety": true,
+  "statement": "雪崩の危険がある場所を行動するグループでは、ビーコン・プローブ・ショベルはリーダー1人分だけそろえれば、他の人の携行は不要である。",
+  "correctAnswer": false,
+  "explanation": "リーダーだけが救助用具を持っていると、その人が埋没した場合や複数人が巻き込まれた場合に、仲間が十分な捜索・掘り出しを行えない。雪崩の危険がある場所で行動する全員が、ビーコン・プローブ・ショベルを携行し、操作を練習する。一式を共同装備として用意するだけでは、各自の備えを代替できない。",
+  "learningPoint": "リーダー1人分だけでなく、行動する各人が雪崩救助用具を携行し、使用訓練を行う。",
+  "researchKeywords": [
+   "全員の救助装備・仲間による救助の訓練"
+  ],
+  "sources": [
+   {
+    "src": "S06",
+    "section": "全員の救助装備・仲間による救助の訓練"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E02",
+  "pattern": "E",
+  "no": 2,
+  "category": "雪山登山・雪崩",
+  "safety": true,
+  "statement": "前日に同じ斜面を問題なく滑れたなら、翌日に風や気温が変わっても、同じ行動計画を再確認せず実行してよい。",
+  "correctAnswer": false,
+  "explanation": "前日に問題なく滑れたという結果は、翌日の積雪や気象の状態を保証しない。風で雪が移動したり、気温の変化で雪の結合状態が変わったりすると、同じ斜面でも危険の条件は変わる。当日の情報と現地の変化を確認し、経路・時間・実施そのものを見直す。",
+  "learningPoint": "前日に無事に滑れた斜面でも、翌日の気象・積雪情報と現地の状態を確認し、行動計画を再評価する。",
+  "researchKeywords": [
+   "気象確認と行動計画",
+   "雪崩問題"
+  ],
+  "sources": [
+   {
+    "src": "S01",
+    "section": "気象確認と行動計画"
+   },
+   {
+    "src": "S05",
+    "section": "雪崩問題"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E03",
+  "pattern": "E",
+  "no": 3,
+  "category": "雪山登山・雪崩",
+  "safety": false,
+  "statement": "雪崩情報は、危険度の段階だけでなく、雪崩の種類、発生しやすい場所、発生可能性や規模も合わせて読む。",
+  "correctAnswer": true,
+  "explanation": "雪崩情報の危険度は全体像を把握する入口であり、それだけでは具体的な斜面の選択に必要な条件が分からない。どの種類の雪崩が、どの標高・方位等で、どの程度の起こりやすさ・規模で想定されるかを読む。その情報を計画する経路と照合し、現地の観察と合わせて判断する。",
+  "learningPoint": "危険度の段階に加え、雪崩の種類・場所・発生可能性・規模を確認する。",
+  "researchKeywords": [
+   "雪崩情報・雪崩問題の読み取り"
+  ],
+  "sources": [
+   {
+    "src": "S05",
+    "section": "雪崩情報・雪崩問題の読み取り"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E04",
+  "pattern": "E",
+  "no": 4,
+  "category": "雪山登山・雪崩",
+  "safety": false,
+  "statement": "風による積雪の吹きだまりは、主稜線の風下だけでなく、沢や支尾根などの地形の影響を受けた場所にも形成される。",
+  "correctAnswer": true,
+  "explanation": "風で運ばれる雪は、主稜線の風下だけにたまるわけではない。沢や支尾根などの地形に沿って風向や流れが変わり、横方向から雪が吹き込む斜面にも吹きだまりが生じる。主稜線の向きだけでなく、局所的な地形と風による雪の再分配を確認する。",
+  "learningPoint": "沢・支尾根等の地形の影響による、局所的な吹きだまりも確認する。",
+  "researchKeywords": [
+   "風と地形",
+   "ウインドスラブ"
+  ],
+  "sources": [
+   {
+    "src": "S04",
+    "section": "風と地形"
+   },
+   {
+    "src": "S05",
+    "section": "ウインドスラブ"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E05",
+  "pattern": "E",
+  "no": 5,
+  "category": "雪山登山・雪崩",
+  "safety": false,
+  "statement": "装備・訓練・雪崩情報をそろえても、管理区域外での雪崩リスクがゼロになるわけではない。",
+  "correctAnswer": true,
+  "explanation": "装備、訓練、雪崩情報は、危険を避けたり、事故時に対応したりするための備えである。ただし、積雪の状態には把握しきれない部分があり、すべてをそろえても雪崩の発生や被害を完全には防げない。準備があることを入山の許可証と考えず、経路変更や中止も含めて行動を判断する。",
+  "learningPoint": "備えはリスク低減のためであり、管理区域外での絶対的な安全を保証しない。",
+  "researchKeywords": [
+   "雪崩予防・残る危険と行動判断"
+  ],
+  "sources": [
+   {
+    "src": "S06",
+    "section": "雪崩予防・残る危険と行動判断"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E06",
+  "pattern": "E",
+  "no": 6,
+  "category": "雪山登山・雪崩",
+  "safety": true,
+  "statement": "登山計画を提出していても、全員が無事に下山できた場合は、計画を知らせた相手に下山を報告しなくてよい。",
+  "correctAnswer": false,
+  "explanation": "計画を知らせた相手は、予定時刻を過ぎても連絡がなければ、道迷いや事故を疑うことになる。無事に下山した場合も、下山・帰着を報告して行動が終了したことを共有する。登山計画の提出と下山の連絡を一組にし、利用した届出方法に所定の下山報告があれば、それも行う。",
+  "learningPoint": "全員が無事に下山した場合も、計画を知らせた相手へ下山・帰着を報告する。",
+  "researchKeywords": [
+   "PDF3頁登山計画・下山報告"
+  ],
+  "sources": [
+   {
+    "src": "S01",
+    "section": "PDF3頁登山計画・下山報告"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E07",
+  "pattern": "E",
+  "no": 7,
+  "category": "雪山登山・雪崩",
+  "safety": false,
+  "statement": "雪崩地形は、その内部に入り込むと全体像を把握しにくいため、離れた位置から発生域・走路・堆積域のつながりを確認する視点も使う。",
+  "correctAnswer": true,
+  "explanation": "雪崩地形の内部にいると、上方の発生斜面や、雪が流れ込む別の谷などが見えなくなる場合がある。離れた位置や地形図から、発生域・走路・堆積域のつながりを把握し、目の前だけの判断を補う。観察のために危険範囲へ近づくのではなく、安全な位置から全体像を確認する。",
+  "learningPoint": "近くの雪面だけでなく、雪崩がどこから来てどこへ到達するかを地形全体から確認する。",
+  "researchKeywords": [
+   "雪崩地形の全体像・観察位置"
+  ],
+  "sources": [
+   {
+    "src": "S04",
+    "section": "雪崩地形の全体像・観察位置"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E08",
+  "pattern": "E",
+  "no": 8,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "実習中は指導者について滑ればよいため、学生自身が標識やゲレンデルールを確認する必要はない。",
+  "correctAnswer": false,
+  "explanation": "講習中の受講者にも、標識・規制・滑走ルールを守る行動が求められる。指導者を追っていても、前方の人との間隔や合流時の確認、閉鎖区画への立入りを自分で確認する。分からない指示はその場で確認し、指導者に従っていることを安全確認の省略理由にしない。",
+  "learningPoint": "実習中でも、学生自身が標識・ゲレンデルールを確認し、周囲の安全に配慮して行動する。",
+  "researchKeywords": [
+   "第2章3標識等",
+   "8指導者・9受講者"
+  ],
+  "sources": [
+   {
+    "src": "S08",
+    "section": "第2章3標識等"
+   },
+   {
+    "src": "S08",
+    "section": "8指導者・9受講者"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E09",
+  "pattern": "E",
+  "no": 9,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "滑走速度の調整には、ブレーキ動作だけでなく、ターンの形や進む方向を変える方法も使える。",
+  "correctAnswer": true,
+  "explanation": "スキーの速度は、止めるためのブレーキ動作だけでなく、斜面に対してどの向きへ進むかによっても調整できる。ターンを続けて斜面を横切る方向へ進むなど、ターンの形と進行方向を利用する。ただし、進路を変えるときも周囲を確認し、他者の前へ急に入り込むような操作は避ける。",
+  "learningPoint": "ブレーキ動作に加え、ターンの形や斜面に対する進行方向を使って速度を制御する。",
+  "researchKeywords": [
+   "ターンと速度の調整",
+   "ターンのつなぎ方",
+   "第1・2項"
+  ],
+  "sources": [
+   {
+    "src": "S11",
+    "section": "ターンと速度の調整"
+   },
+   {
+    "src": "S16",
+    "section": "ターンのつなぎ方"
+   },
+   {
+    "src": "S07",
+    "section": "第1・2項"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E10",
+  "pattern": "E",
+  "no": 10,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "当日のコース利用では、朝に見た地図だけでなく、その後の掲示・放送・係員の指示による変更も確認する。",
+  "correctAnswer": true,
+  "explanation": "コースの開放状況や注意事項は、気象・雪面・整備などの状況に応じて変わる場合がある。朝に見た地図や案内は、その後の閉鎖や利用制限を反映しているとは限らない。現場の掲示・放送・係員の指示を確認し、より新しい規制が出ていればそれに従う。",
+  "learningPoint": "朝の案内だけで判断せず、その時点の掲示・放送・係員の指示を確認する。",
+  "researchKeywords": [
+   "標識・掲示・放送・係員の指示"
+  ],
+  "sources": [
+   {
+    "src": "S09",
+    "section": "標識・掲示・放送・係員の指示"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E11",
+  "pattern": "E",
+  "no": 11,
+  "category": "スキー滑走・安全",
+  "safety": true,
+  "statement": "他の利用者が入っているのを見ても、閉鎖標識や立入禁止の指示がある斜面には入らない。",
+  "correctAnswer": true,
+  "explanation": "他の利用者が入っていることは、閉鎖や立入禁止が解除されたことの証明ではない。立入りの可否は施設の標識や係員の指示で判断する。他者の行動に続いて規制を越えず、案内が分からない場合は係員に確認する。自分の技量や他者の通過を理由に、禁止された斜面へ入らない。",
+  "learningPoint": "先行者がいても、閉鎖標識や立入禁止の指示がある斜面には入らない。",
+  "researchKeywords": [
+   "閉鎖区域・立入禁止と施設の規制"
+  ],
+  "sources": [
+   {
+    "src": "S09",
+    "section": "閉鎖区域・立入禁止と施設の規制"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E12",
+  "pattern": "E",
+  "no": 12,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "滑り慣れたコースなら、濃い霧が出ても、晴天時と同じ速度で滑って差し支えない。",
+  "correctAnswer": false,
+  "explanation": "慣れたコースであっても、霧によって他の利用者や雪面の凹凸を発見できる距離は短くなる。コースの記憶では、その時点の人の動きや障害物の位置を把握できない。視界と雪面に合わせて速度を落とし、滑走を安全に制御できない状況では無理に継続しない。",
+  "learningPoint": "滑り慣れたコースでも、濃い霧が出た場合は視界に合わせて速度と滑り方を調整する。",
+  "researchKeywords": [
+   "第2項速度の制御",
+   "第2章5視界不良時の減速"
+  ],
+  "sources": [
+   {
+    "src": "S07",
+    "section": "第2項速度の制御"
+   },
+   {
+    "src": "S08",
+    "section": "第2章5視界不良時の減速"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E13",
+  "pattern": "E",
+  "no": 13,
+  "category": "スキー滑走・安全",
+  "safety": true,
+  "statement": "ヘルメットを着用していれば、飲酒によって判断力や操作能力が低下した状態でも滑走してよい。",
+  "correctAnswer": false,
+  "explanation": "ヘルメットは頭部を保護するための装備であり、飲酒によって低下した判断力や操作能力を回復させるものではない。スノースポーツ安全基準は、飲酒等によって心身の機能が低下した状態での滑走を禁止事項としている。保護具の着用と、安全に判断・操作できる状態であることは別の条件である。",
+  "learningPoint": "ヘルメットを着用していても、飲酒等で判断力や操作能力が低下した状態では滑走しない。",
+  "researchKeywords": [
+   "第2章4心身の機能が低下した状態での滑走"
+  ],
+  "sources": [
+   {
+    "src": "S08",
+    "section": "第2章4心身の機能が低下した状態での滑走"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E14",
+  "pattern": "E",
+  "no": 14,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "左右へ連続する基本的なプルークターンでは、ターンの向きが変わっても、外側になるスキーは同じなので荷重する脚を変えない。",
+  "correctAnswer": false,
+  "explanation": "外スキーはターンの中心から遠い側のスキーを指す。右ターンでは左スキーが外側、左ターンでは右スキーが外側になるため、左右に連続して曲がると外脚の役割も入れ替わる。基本的なプルークターンでは、その切替えに合わせて左右の荷重を調整する。同じ脚が常に外側になるわけではない。",
+  "learningPoint": "連続するプルークターンでは、ターンの向きに応じて外スキーが左右で入れ替わり、荷重する脚も調整する。",
+  "researchKeywords": [
+   "How to Turn on Skis",
+   "Linking Turns"
+  ],
+  "sources": [
+   {
+    "src": "S11",
+    "section": "How to Turn on Skis"
+   },
+   {
+    "src": "S11",
+    "section": "Linking Turns"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E15",
+  "pattern": "E",
+  "no": 15,
+  "category": "スキー滑走・安全",
+  "safety": false,
+  "statement": "班の待機場所は、狭くて上方から見えにくい場所を避け、通行を妨げず他者から確認しやすい場所を選ぶ。",
+  "correctAnswer": true,
+  "explanation": "上方から見えにくい場所やコースの狭い場所で班が停止すると、後続の利用者が発見・回避する余裕を失う。待機場所は上方から確認しやすく、通行を妨げない位置を選ぶ。班全員が並ぶことによってコースをふさがないようにし、再出発時には上下を確認する。",
+  "learningPoint": "班の待機場所は、見通し・コース幅・通行への影響を確認して選ぶ。",
+  "researchKeywords": [
+   "第5項再出発",
+   "第6項停止場所"
+  ],
+  "sources": [
+   {
+    "src": "S07",
+    "section": "第5項再出発"
+   },
+   {
+    "src": "S07",
+    "section": "第6項停止場所"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E16",
+  "pattern": "E",
+  "no": 16,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト3級で、2種目の評価が59ポイントと61ポイントの場合、合計120ポイントとなり、得点の合格基準を満たす。",
+  "correctAnswer": true,
+  "explanation": "採用版の3級の得点基準は、2種目の評価を合計して120ポイント以上である。59＋61＝120となるため、この例は得点による合格基準を満たす。各種目が個別に60以上でなければならないという条件ではない。所定の講習内テストや公認手続きは別に満たす。",
+  "learningPoint": "59ポイントと61ポイントの合計120は、3級の得点基準を満たす。",
+  "researchKeywords": [
+   "PDF2頁・Ⅱ2(1)③c 3級の合否判定"
+  ],
+  "sources": [
+   {
+    "src": "S13",
+    "section": "PDF2頁・Ⅱ2(1)③c 3級の合否判定"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E17",
+  "pattern": "E",
+  "no": 17,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト1級の事前講習は、受検時点で未修了でも、合格発表後に受ければ受検条件を満たす。",
+  "correctAnswer": false,
+  "explanation": "1級の事前講習は、名称のとおりテストを受けるまでに修了する条件である。1単位・2時間の受講を修了証で確認し、その有効期間は受講年度に限られる。合格発表の後に受講する予定があっても、受検時点で未修了という条件不備を後から置き換えることはできない。",
+  "learningPoint": "SAJ級別テスト1級の事前講習は、合格発表後ではなく、テスト受検までに修了する。",
+  "researchKeywords": [
+   "PDF3頁右欄・第20条(2)(3)事前講習"
+  ],
+  "sources": [
+   {
+    "src": "S12",
+    "section": "PDF3頁右欄・第20条(2)(3)事前講習"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E18",
+  "pattern": "E",
+  "no": 18,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト2級では、ベーシックパラレルターンの大回りは中急斜面、小回りは中斜面と、斜面条件が異なる。",
+  "correctAnswer": true,
+  "explanation": "2級のベーシックパラレルターン・大回りはナチュラル・中急斜面、小回りはナチュラル・中斜面が指定されている。どちらも同じ「ナチュラル」の区分だが、斜度区分まで同一ではない。残るシュテムターンはナチュラル・中斜面であり、3種目の名称と指定斜面を対応させて確認する。",
+  "learningPoint": "2級は大回りが中急斜面、小回りが中斜面で、いずれもナチュラルの指定である。",
+  "researchKeywords": [
+   "PDF2頁・Ⅱ2(1)②a 2級の指定斜面"
+  ],
+  "sources": [
+   {
+    "src": "S13",
+    "section": "PDF2頁・Ⅱ2(1)②a 2級の指定斜面"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E19",
+  "pattern": "E",
+  "no": 19,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJ級別テスト2級で、確定した取得ポイントが65・65・64の場合、平均がほぼ65なので、得点の合格基準を満たす。",
+  "correctAnswer": false,
+  "explanation": "確定した3種目の取得ポイントは、65＋65＋64＝194となり、2級の基準195以上に1ポイント届かない。合否判定は確定した取得ポイントの合計に基づき、「平均がほぼ65」という概算で合格にはしない。検定員の平均を処理する段階と、各種目の確定点を合計する段階を区別する。",
+  "learningPoint": "65・65・64の合計は194ポイントであり、2級の得点による合格基準195以上を満たさない。",
+  "researchKeywords": [
+   "PDF2頁・Ⅱ2(1)②b・c 2級の評価と合否判定"
+  ],
+  "sources": [
+   {
+    "src": "S13",
+    "section": "PDF2頁・Ⅱ2(1)②b・c 2級の評価と合否判定"
+   }
+  ],
+  "version": "2026.10-r1"
+ },
+ {
+  "id": "E20",
+  "pattern": "E",
+  "no": 20,
+  "category": "SAJ級別テスト",
+  "safety": false,
+  "statement": "SAJの通常の級別テスト3級は、小学生以下だけを対象としており、大学生は受検できない。",
+  "correctAnswer": false,
+  "explanation": "採用版の通常の級別テストは、規程第20条で年齢制限を設けず、希望する級を受検できるとしている。したがって大学生も3級を受検できる。小学生以下等の対象条件があるジュニアテストと通常の級別テストを混同しない。なお、1級には年齢とは別に既得級・認定や事前講習の条件がある。",
+  "learningPoint": "SAJの通常の級別テスト3級には小学生以下という年齢制限はなく、大学生も受検できる。",
+  "researchKeywords": [
+   "PDF3頁右欄・第20条(1)受検資格"
+  ],
+  "sources": [
+   {
+    "src": "S12",
+    "section": "PDF3頁右欄・第20条(1)受検資格"
+   }
+  ],
+  "version": "2026.10-r1"
+ }
+];
+
+</script>
+<script>
+/* ===== 教員が変更できる設定 ===== */
+const CONFIG = {
+  bankVersion: "2026.10-r1",          // 問題を改訂したら更新（受験中の記録と混同しないため）
+  divisions: ["ディビジョン１","ディビジョン２","ディビジョン３","ディビジョン４","その他"],
+  requiredPatterns: ["A","B","C","D","E"], // 修了に必要なパターン
+  shuffle: false,                     // 出題順シャッフル（初期値：無効）
+  total: 20,
+  passCount: 18,                      // 18問以上正解（＝正答率90％以上）で合格
+  storageKey: "nssu-ski-alt-program"
+};
+const PATTERNS = {
+  A:{name:"パターンA",theme:"計画・基礎知識の確認"},
+  B:{name:"パターンB",theme:"条件と判断の理解"},
+  C:{name:"パターンC",theme:"地形・集団行動・制度の理解"},
+  D:{name:"パターンD",theme:"状況変化と規程の適用"},
+  E:{name:"パターンE",theme:"総合判断と誤認の修正"}
+};
+const SAKURA = "data:image/png;base64,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";
+const NSSU = "data:image/png;base64,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";
+const QMAP = Object.fromEntries(QUESTIONS.map(q=>[q.id,q]));
+const BY_PATTERN = {}; for(const q of QUESTIONS){(BY_PATTERN[q.pattern]??=[]).push(q)}
+for(const p in BY_PATTERN) BY_PATTERN[p].sort((a,b)=>a.no-b.no);
+
+/* ===== 判定（整数の正解数で判定。丸めた％には依存しない） ===== */
+function judge(answeredCount, correctCount){
+  if(answeredCount < CONFIG.total) return "in_progress";
+  return correctCount >= CONFIG.passCount ? "passed" : "failed";
+}
+const pct = c => Math.round(c / CONFIG.total * 100);
+
+/* ===== 保存 ===== */
+let storageOK = true;
+function emptyDB(){return {schema:1, current:null, learners:{}, ui:{screen:"home"}}}
+function load(){
+  try{ const s = localStorage.getItem(CONFIG.storageKey); if(s){ const d = JSON.parse(s); if(d && d.schema===1) return d; } }
+  catch(e){ storageOK = false; }
+  return emptyDB();
+}
+let db = load();
+let lastSaved = null;
+function save(){
+  try{ localStorage.setItem(CONFIG.storageKey, JSON.stringify(db)); storageOK = true; lastSaved = new Date(); }
+  catch(e){ storageOK = false; }
+  renderSave(); return storageOK;
+}
+function renderSave(){
+  const el = document.getElementById("save");
+  if(!storageOK){ el.className="save err"; el.textContent="⚠ 保存できません"; }
+  else if(lastSaved){ el.className="save"; el.textContent="この端末に保存済み "+hm(lastSaved); }
+  else { el.className="save"; el.textContent="記録はこの端末に保存"; }
+}
+
+/* ===== 便利関数 ===== */
+function h(tag, attrs, ...kids){
+  const el = document.createElement(tag);
+  if(attrs) for(const [k,v] of Object.entries(attrs)){
+    if(v==null || v===false) continue;
+    if(k==="class") el.className=v;
+    else if(k.startsWith("on")) el.addEventListener(k.slice(2), v);
+    else if(k==="html") el.innerHTML=v; // 固定文言のみで使用
+    else el.setAttribute(k, v===true?"":v);
+  }
+  for(const c of kids.flat()){ if(c==null||c===false) continue; el.append(c instanceof Node ? c : document.createTextNode(String(c))); }
+  return el;
+}
+const nowISO = () => new Date().toISOString();
+const two = n => String(n).padStart(2,"0");
+function hm(d){return two(d.getHours())+":"+two(d.getMinutes())}
+function fmt(iso){ if(!iso) return "—"; const d=new Date(iso); return `${d.getFullYear()}/${two(d.getMonth()+1)}/${two(d.getDate())} ${hm(d)}`; }
+function uid(){ try{ return crypto.randomUUID(); }catch(e){ return "a-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,10); } }
+function announce(t){ const l=document.getElementById("live"); l.textContent=""; setTimeout(()=>l.textContent=t,30); }
+const ansLabel = v => v ? "○ 正しい" : "× 誤っている";
+
+/* ===== 学習者・受験データ ===== */
+function learner(){ return db.current ? db.learners[db.current] : null; }
+function pstate(p){ const L=learner(); L.patterns ??= {}; return (L.patterns[p] ??= {attempts:[], passedAt:null, passedAttemptId:null}); }
+function activeAttempt(p){ const a = pstate(p).attempts.at(-1); return a && a.status==="in_progress" ? a : null; }
+function completed(p){ return pstate(p).attempts.filter(a=>a.status!=="in_progress"); }
+function best(p){ const c=completed(p); return c.length ? c.reduce((m,a)=>a.correctCount>m.correctCount?a:m) : null; }
+function patternStatus(p){
+  const s=pstate(p), act=activeAttempt(p), last=s.attempts.at(-1);
+  if(s.passedAt) return {key:"pass", label:"合格", sub: act ? "再受験中" : null};
+  if(act) return {key:"prog", label:"学習中"};
+  if(last && last.status==="failed") return {key:"retry", label:"再挑戦が必要"};
+  return {key:"new", label:"未開始"};
+}
+function startAttempt(p){
+  const s = pstate(p);
+  let order = BY_PATTERN[p].map(q=>q.id);
+  if(CONFIG.shuffle){ for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];} }
+  const a = {attemptId:uid(), pattern:p, number:s.attempts.length+1, bankVersion:CONFIG.bankVersion, order,
+    answers:{}, pos:0, phase:"answering", answeredCount:0, correctCount:0, status:"in_progress",
+    startedAt:nowISO(), updatedAt:nowISO(), completedAt:null};
+  s.attempts.push(a); return a;
+}
+
+/* ===== 画面遷移 ===== */
+function go(screen, extra={}){ db.ui = {screen, ...extra}; save(); render(true); }
+let busy = false;
+let lockUntil = 0; // 回答直後の連打が「次へ」「解説を確認して次へ」に当たるのを防ぐ
+const locked = () => Date.now() < lockUntil;
+
+function render(focus){
+  const app = document.getElementById("app");
+  app.replaceChildren();
+  const sc = db.ui.screen;
+  if(sc!=="home" && sc!=="learner" && !learner()){ db.ui={screen:"home"}; }
+  const view = ({home:vHome, learner:vLearner, patterns:vPatterns, guide:vGuide, quiz:vQuiz, result:vResult})[db.ui.screen] || vHome;
+  app.append(view());
+  if(db.ui.screen!=="quiz") app.append(vFooter());
+  if(focus){ const t = app.querySelector("[data-focus]"); if(t){ t.setAttribute("tabindex","-1"); t.focus({preventScroll:true}); } window.scrollTo(0,0); }
+}
+
+function vFooter(){
+  return h("footer",{class:"site"},
+    h("div",{class:"wrap"},
+      h("img",{src:NSSU,alt:"",width:58,height:20}),
+      "制作：日本体育大学スキー実習プロジェクト委員会",h("br"),
+      "問題集バージョン "+CONFIG.bankVersion));
+}
+
+const DISCLAIMER = "本教材は知識学習用です。本教材の合格は、スキー滑走への復帰許可、医療上の判断、実技検定の合格を意味しません。実際の活動については、医師・実習担当教員・現地係員等の指示に従ってください。";
+
+function inAppBrowserNote(){
+  if(/\bLine\//i.test(navigator.userAgent||"")) return h("div",{class:"warnbox"},h("strong",null,"LINEアプリ内のブラウザで開いています"),"この画面での動作は確認していません。記録が消える場合があるため、右上のメニューから「ブラウザで開く」を選び、SafariやChromeで利用してください。");
+  return null;
+}
+function storageNote(){
+  if(storageOK) return null;
+  return h("div",{class:"warnbox",role:"alert"},h("strong",null,"この端末に記録を保存できません"),"プライベートブラウズ等の設定で保存が止められている可能性があります。この状態では、画面を閉じると回答が失われます。通常のウィンドウで開き直してください。");
+}
+
+/* --- トップ --- */
+function vHome(){
+  const L = learner();
+  return h("main",{class:"wrap stack"},
+    inAppBrowserNote(), storageNote(),
+    h("section",{class:"hero"},
+      h("div",{class:"crest"},h("img",{src:SAKURA,alt:"日本体育大学 シンボルマーク"})),
+      h("div",null,
+        h("p",{class:"eyebrow"},"日本体育大学 スキー実習"),
+        h("h1",{"data-focus":""},"代替学習プログラム"),
+        h("p",{class:"sub"},"スキー・雪・冬の自然を学ぶ ◯❌チャレンジ"))),
+    h("div",{class:"card stack paper paper-yellow"},
+      h("p",null,"滑走しない時間を使って、資料を調べながら、雪山の安全、ゲレンデのルール、SAJ級別テストの仕組みを学びます。"),
+      h("ul",{class:"plain small"},
+        h("li",null,"A〜Eの5パターン、各20問の○×問題です。"),
+        h("li",null,"資料やWebサイトを調べながら回答してかまいません。調べることは不正ではありません。"),
+        h("li",null,"時間制限はありません。体調に合わせて途中でやめ、続きから再開できます。"),
+        h("li",null,"各パターン20問中18問以上の正解で合格です。")),
+      h("div",{class:"btn-row"},
+        L ? h("button",{class:"btn btn-primary",type:"button",onclick:()=>go("patterns")},`${L.name} さんの学習を続ける`)
+          : h("button",{class:"btn btn-primary",type:"button",onclick:()=>go("learner")},"学習をはじめる"),
+        L ? h("button",{class:"btn btn-secondary",type:"button",onclick:()=>go("learner")},"学習者情報を変更・切り替え") : null)),
+    h("div",{class:"notice"},h("strong",null,"ご注意"),DISCLAIMER),
+    h("div",{class:"notice small"},h("strong",null,"学習記録の保存について"),
+      "学習記録はこの端末・このブラウザに保存されます。教員へ自動で提出されることはありません。ブラウザの履歴やサイトデータを消去すると、記録も消えます。結果の提出方法は担当教員の指示に従ってください。"),
+    h("p",{class:"credit"},"制作：日本体育大学スキー実習プロジェクト委員会")
+  );
+}
+
+/* --- 学習者情報 --- */
+function vLearner(){
+  const L = learner();
+  const err = h("p",{class:"err-text",role:"alert"});
+  const sid = h("input",{type:"text",id:"sid",name:"sid",autocomplete:"off",inputmode:"text",maxlength:20,required:true,value:L?.id||""});
+  const nm = h("input",{type:"text",id:"sname",name:"sname",autocomplete:"name",maxlength:40,required:true,value:L?.name||""});
+  const dv = h("select",{id:"sdiv",name:"sdiv",required:true},
+    h("option",{value:""},"選択してください"),
+    CONFIG.divisions.map(d=>h("option",{value:d,selected:L?.division===d},d)));
+  const others = Object.values(db.learners).filter(x=>!L || x.id!==L.id);
+  const form = h("form",{class:"card stack paper",novalidate:true,onsubmit:e=>{
+    e.preventDefault();
+    const id = sid.value.trim(), name = nm.value.trim(), div = dv.value;
+    if(!id || !name || !div){ err.textContent="学籍番号・氏名・ディビジョンをすべて入力してください。"; (!id?sid:!name?nm:dv).focus(); return; }
+    const ex = db.learners[id];
+    db.learners[id] = {...(ex||{patterns:{}}), id, name, division:div, updatedAt:nowISO()};
+    db.current = id;
+    go("patterns");
+  }},
+    h("label",{class:"f",for:"sid"},"学籍番号",h("span",{class:"h"},"先頭の0もそのまま入力してください"),sid),
+    h("label",{class:"f",for:"sname"},"氏名",nm),
+    h("label",{class:"f",for:"sdiv"},"ディビジョン",dv),
+    err,
+    h("p",{class:"small muted"},"けがや病気の内容、診断書などは入力しません。入力した情報はこの端末にだけ保存され、本人確認には使われません。"),
+    h("button",{class:"btn btn-primary",type:"submit"},"保存して次へ"));
+  return h("main",{class:"wrap stack"},
+    h("h1",{"data-focus":"",style:"font-size:1.3rem"},"学習者情報の入力"),
+    form,
+    others.length ? h("div",{class:"card stack"},h("h2",{style:"font-size:1rem"},"この端末に保存されている学習者"),
+      others.map(o=>h("button",{class:"btn btn-secondary",type:"button",onclick:()=>{db.current=o.id;go("patterns");}},`${o.name}（${o.id}）に切り替える`))) : null,
+    h("button",{class:"btn btn-ghost",type:"button",onclick:()=>go("home")},"← トップへ戻る"));
+}
+
+/* --- パターン選択 --- */
+function vPatterns(){
+  const L = learner();
+  const req = CONFIG.requiredPatterns;
+  const passed = req.filter(p=>pstate(p).passedAt);
+  const done = passed.length === req.length;
+  const copyMsg = h("p",{class:"small muted",role:"status"});
+  return h("main",{class:"wrap stack"},
+    inAppBrowserNote(), storageNote(),
+    h("div",{class:"stack",style:"gap:4px"},
+      h("p",{class:"eyebrow"},`${L.division}｜${L.id}`),
+      h("h1",{"data-focus":"",style:"font-size:1.3rem"},`${L.name} さんの学習パターン`)),
+    h("section",{class:"card stack","aria-label":"修了状況"},
+      h("div",{class:"progress-summary"},
+        h("div",{class:"dots","aria-hidden":"true"}, req.map(p=>h("span",{class:"dot"+(pstate(p).passedAt?" pass":"")},p))),
+        h("p",{style:"font-weight:700"},`指定パターン ${passed.length} / ${req.length} 合格`)),
+      done ? h("p",{class:"verdict v-ok"},h("span",{class:"ic","aria-hidden":"true"},"✓"),"指定されたすべてのパターンに合格しました（この端末の記録）")
+           : h("p",{class:"small muted"},"指定されたパターンすべてに合格すると修了です。合計の正答率ではなく、パターンごとに判定します。")),
+    h("div",{class:"pgrid"}, Object.keys(PATTERNS).map(pCard)),
+    h("section",{class:"card stack"},
+      h("h2",{style:"font-size:1rem"},"学習記録をコピー"),
+      h("p",{class:"small muted"},"結果をテキストでコピーできます。コピーしただけでは教員に提出されません。提出方法は担当教員の指示に従ってください。"),
+      h("button",{class:"btn btn-secondary",type:"button",onclick:e=>copyRecord(copyMsg)},"学習記録をコピー"), copyMsg),
+    h("button",{class:"btn btn-ghost",type:"button",onclick:()=>go("home")},"← トップへ戻る"));
+}
+function pCard(p){
+  const P=PATTERNS[p], st=patternStatus(p), act=activeAttempt(p), b=best(p), s=pstate(p);
+  const required = CONFIG.requiredPatterns.includes(p);
+  let btn;
+  if(act) btn = h("button",{class:"btn btn-primary",type:"button",onclick:()=>go("quiz",{pattern:p})},`続きから再開（第${act.pos+1}問）`);
+  else if(st.key==="retry") btn = h("button",{class:"btn btn-primary",type:"button",onclick:()=>go("guide",{pattern:p})},"第1問から再挑戦");
+  else if(st.key==="pass") btn = h("button",{class:"btn btn-secondary",type:"button",onclick:()=>go("guide",{pattern:p})},"もう一度取り組む");
+  else btn = h("button",{class:"btn btn-primary",type:"button",onclick:()=>go("guide",{pattern:p})},"学習を開始");
+  const lastDone = completed(p).at(-1);
+  return h("article",{class:"pcard","aria-labelledby":"pc-"+p},
+    h("div",{class:"pcard-h"},
+      h("div",null,h("h3",{id:"pc-"+p},P.name),h("p",{class:"theme"},P.theme)),
+      h("span",{class:"chip st-"+st.key},st.key==="pass"?"✓ ":"",st.label)),
+    st.sub ? h("p",{class:"small",style:"color:var(--brand);font-weight:700"},st.sub+"（合格の記録は消えません）") : null,
+    h("dl",{class:"meta"},
+      h("div",null,h("dt",null,"問題数"),h("dd",null,"20問")),
+      h("div",null,h("dt",null,"合格条件"),h("dd",null,"18問以上")),
+      h("div",null,h("dt",null,"受験回数"),h("dd",null,s.attempts.length+"回")),
+      h("div",null,h("dt",null,"最高正答率"),h("dd",null,b?pct(b.correctCount)+"%":"—")),
+      lastDone ? h("div",null,h("dt",null,"直近"),h("dd",null,`${lastDone.correctCount}/20`)) : null,
+      s.passedAt ? h("div",null,h("dt",null,"合格日"),h("dd",null,fmt(s.passedAt).slice(0,10))) : null),
+    !required ? h("p",{class:"small muted"},"このパターンは修了の必修対象外です。") : null,
+    lastDone ? h("button",{class:"btn btn-ghost",type:"button",style:"align-self:flex-start",onclick:()=>go("result",{pattern:p,attemptId:lastDone.attemptId})},"直近の結果と復習を見る") : null,
+    btn);
+}
+function copyRecord(msgEl){
+  const L=learner();
+  const lines=[`日本体育大学 スキー実習 代替学習プログラム 学習記録（端末内の記録）`,`学籍番号: ${L.id}`,`氏名: ${L.name}`,`ディビジョン: ${L.division}`,`問題集バージョン: ${CONFIG.bankVersion}`,""];
+  for(const p of Object.keys(PATTERNS)){
+    const s=pstate(p), b=best(p), c=completed(p), first=c[0], last=c.at(-1);
+    lines.push(`${PATTERNS[p].name}: ${s.passedAt?"合格("+fmt(s.passedAt)+")":patternStatus(p).label} / 受験${s.attempts.length}回 / 初回 ${first?first.correctCount+"/20":"—"} / 直近 ${last?last.correctCount+"/20":"—"} / 最高 ${b?b.correctCount+"/20":"—"}`);
+  }
+  const req=CONFIG.requiredPatterns; lines.push("", `修了: ${req.every(p=>pstate(p).passedAt)?"指定パターンすべて合格":"未修了"}`, `コピー日時: ${fmt(nowISO())}`);
+  const text=lines.join("\n");
+  const fallback=()=>{ const ta=h("textarea",{readonly:true,rows:10,style:"width:100%;font:inherit;font-size:.85rem"}); ta.value=text; msgEl.replaceChildren("自動コピーできませんでした。下の文字を長押しで選択してコピーしてください。",ta); ta.select(); };
+  try{ navigator.clipboard.writeText(text).then(()=>{msgEl.textContent="コピーしました（まだ提出はされていません）。";},fallback); }catch(e){ fallback(); }
+}
+
+/* --- 学習方法・合格条件 --- */
+function vGuide(){
+  const p = db.ui.pattern, P = PATTERNS[p], s = pstate(p), last = s.attempts.at(-1);
+  const isRetry = last && last.status==="failed";
+  return h("main",{class:"wrap stack"},
+    h("p",{class:"eyebrow"},P.name+"｜"+P.theme),
+    h("h1",{"data-focus":"",style:"font-size:1.3rem"},"学習方法と合格条件"),
+    h("div",{class:"card stack"},
+      h("dl",{class:"kv"},
+        h("dt",null,"問題数"),h("dd",null,"20問（○×で回答）"),
+        h("dt",null,"合格条件"),h("dd",null,"20問中18問以上の正解（正答率90％以上）"),
+        h("dt",null,"不合格"),h("dd",null,"17問以下の正解（正答率85％以下）"),
+        h("dt",null,"今回の回数"),h("dd",null,`第${s.attempts.length+1}回`)),
+      h("ul",{class:"plain small"},
+        h("li",null,"「○ 正しい」「× 誤っている」を押した時点で回答が確定します。後から変更はできません。"),
+        h("li",null,"問題ごとの「調べるヒント」「参考資料」を使って、調べてから回答してください。別のアプリやタブに移っても記録は残ります。"),
+        h("li",null,"間違えた問題は解説が表示されます。解説を確認してから次の問題へ進みます。"),
+        h("li",null,"途中で何問間違えても、第20問まで取り組みます。結果は20問を終えてから表示されます。"),
+        h("li",null,"不合格の場合は、同じパターンを第1問から解き直します。"))),
+    isRetry ? h("p",{class:"warnbox"},`前回は ${last.correctCount}/20問 の正解でした。今回は新しい受験として第1問から始まり、前回の正解数は引き継がれません。`) : null,
+    h("div",{class:"btn-row"},
+      h("button",{class:"btn btn-primary",type:"button",onclick:()=>{ if(!activeAttempt(p)) startAttempt(p); go("quiz",{pattern:p}); }}, isRetry?"第1問から再挑戦":"第1問からはじめる"),
+      h("button",{class:"btn btn-ghost",type:"button",onclick:()=>go("patterns")},"← パターン一覧へ戻る")));
+}
+
+/* --- 出題 --- */
+function sourceList(q){
+  return h("ul",{class:"srcs"}, q.sources.map(r=>{ const S=SOURCES[r.src];
+    return h("li",null,h("a",{href:S.url,target:"_blank",rel:"noopener noreferrer"},S.title+" ↗"),
+      h("span",{class:"pub"},`${S.publisher}｜該当箇所：${r.section}｜確認日：${S.checked.replaceAll("-","/")}（教材原版の記載）`)); }));
+}
+function vQuiz(){
+  const p = db.ui.pattern, a = activeAttempt(p);
+  if(!a){ db.ui={screen:"patterns"}; return vPatterns(); }
+  const q = QMAP[a.order[a.pos]], ans = a.answers[q.id];
+  const n = a.pos+1;
+  const frag = document.createDocumentFragment();
+  frag.append(h("div",{class:"qbar"},h("div",{class:"wrap"},
+    h("div",{class:"qbar-row"},h("b",null,PATTERNS[p].name+"｜第"+a.number+"回"),h("span",{class:"qnum"},`第${n}問／20問`)),
+    h("div",{class:"bar",role:"progressbar","aria-label":"回答済み","aria-valuemin":0,"aria-valuemax":20,"aria-valuenow":a.answeredCount,"aria-valuetext":`20問中${a.answeredCount}問回答済み`},h("i",{style:`width:${a.answeredCount/20*100}%`})),
+    h("p",{class:"qnote"},`回答済み ${a.answeredCount}/20｜途中で閉じても、この端末に保存され、続きから再開できます。`))));
+  const chat = h("div",{class:"chat"});
+  // これまでの回答
+  const prev = a.order.slice(0,a.pos).map(id=>QMAP[id]);
+  if(prev.length) chat.append(h("details",{class:"history"},h("summary",null,`これまでの回答を見る（${prev.length}問）`),
+    h("ol",{class:"hist-list"}, prev.map((pq,i)=>{const r=a.answers[pq.id]; return h("li",null,
+      h("span",{class:"tag "+(r.correct?"v-ok":"v-ng")},`第${i+1}問 ${r.correct?"✓ 正解":"！ 不正解"}`)," ",pq.statement,h("br"),
+      h("span",{class:"muted"},`あなたの回答：${ansLabel(r.answer)}`), " ",
+      h("button",{class:"btn btn-ghost",type:"button",style:"min-height:44px;padding:0 4px",onclick:()=>openExplain(a,pq,false)},"解説"));}))));
+  // 問題
+  chat.append(h("div",{class:"msg"},
+    h("div",{class:"avatar","aria-hidden":"true"},h("img",{src:SAKURA,alt:""})),
+    h("div",{class:"bubble paper"},
+      h("p",{class:"who"},"学習ナビ"),
+      h("span",{class:"qlabel"},`第${n}問｜${q.category}`),
+      h("h2",{class:"qtext","data-focus":"",id:"qtext"},q.statement),
+      h("p",{class:"small muted",style:"margin-top:6px"},"この文の内容は正しいでしょうか。"),
+      h("div",{class:"tools"},
+        h("details",{class:"hint"},h("summary",null,"🔎 調べるヒント"),
+          h("div",{class:"hint-body"},
+            h("p",null,"次の言葉や見出しに注目して調べてみましょう。"),
+            h("p",null,q.researchKeywords.map(k=>h("span",{class:"kw"},k))),
+            h("p",{class:"muted"},"資料：",[...new Set(q.sources.map(r=>SOURCES[r.src].title))].join("／")))),
+        h("details",{class:"hint"},h("summary",null,"📄 参考資料を開く"),
+          h("div",{class:"hint-body"},h("p",{class:"muted",style:"margin-bottom:6px"},"別のタブで開きます。戻ってきても回答の記録は残っています。"),sourceList(q)))))));
+  if(ans){
+    chat.append(h("div",{class:"msg me"},h("div",{class:"bubble"},h("p",{class:"who",style:"text-align:right"},"あなたの回答"),h("p",{style:"font-weight:700"},ansLabel(ans.answer)))));
+    chat.append(h("div",{class:"msg"},
+      h("div",{class:"avatar","aria-hidden":"true"},h("img",{src:SAKURA,alt:""})),
+      h("div",{class:"bubble "+(ans.correct?"res-ok":"res-ng")},
+        h("p",{class:"verdict "+(ans.correct?"v-ok":"v-ng")},h("span",{class:"ic","aria-hidden":"true"},ans.correct?"✓":"！"),ans.correct?"正解です":h("span",{class:"ng-red"},"不正解です")),
+        ans.correct ? h("p",{class:"point"},"ポイント：",q.learningPoint)
+                    : h("p",{class:"point"},`正しい回答は「${ansLabel(q.correctAnswer)}」です。解説を確認してから次へ進みましょう。`),
+        h("button",{class:"btn btn-ghost",type:"button",style:"padding-left:0",onclick:()=>openExplain(a,q,a.phase==="awaiting_ack")},"解説を読む"))));
+  }
+  frag.append(h("main",{class:"wrap"},storageNote(),chat));
+  // 下部操作
+  const dock = h("div",{class:"dock"}); const dw = h("div",{class:"wrap"}); dock.append(dw);
+  if(a.phase==="answering"){
+    dw.append(h("p",{class:"lbl"},"問題文の内容について回答してください"),
+      h("div",{class:"ans",role:"group","aria-label":"回答"},
+        h("button",{class:"btn",type:"button",id:"btn-t","aria-label":"○ 正しい（問題文の内容は正しい）",onclick:()=>answer(true)},h("span",{class:"sym","aria-hidden":"true"},"○"),"正しい"),
+        h("button",{class:"btn",type:"button",id:"btn-f","aria-label":"× 誤っている（問題文の内容は誤っている）",onclick:()=>answer(false)},h("span",{class:"sym","aria-hidden":"true"},"×"),"誤っている")));
+  } else if(a.phase==="awaiting_ack"){
+    dw.append(h("button",{class:"btn btn-primary",type:"button",onclick:()=>openExplain(a,q,true)},"解説を読む"));
+  } else if(a.phase==="answered"){
+    dw.append(h("button",{class:"btn btn-primary",type:"button",id:"btn-next",onclick:next}, a.pos===19?"結果を見る":"次の問題へ"));
+  }
+  frag.append(dock);
+  const box = document.createElement("div"); box.append(frag); return box;
+}
+
+function answer(val){
+  if(busy) return; busy = true;
+  try{
+    const a = activeAttempt(db.ui.pattern);
+    if(!a || a.phase!=="answering") return;
+    const qid = a.order[a.pos];
+    if(a.answers[qid]) return;            // 最初の回答のみ採点
+    const q = QMAP[qid], correct = (val === q.correctAnswer);
+    a.answers[qid] = {answer:val, correct, answeredAt:nowISO(), explanationAck:false, ackAt:null};
+    a.answeredCount = Object.keys(a.answers).length;
+    a.correctCount = Object.values(a.answers).filter(r=>r.correct).length;
+    a.phase = correct ? "answered" : "awaiting_ack";
+    lockUntil = Date.now() + 800;
+    a.updatedAt = nowISO();
+    save(); render(false);
+    if(correct){ announce("正解です。"+q.learningPoint); document.getElementById("btn-next")?.focus(); }
+    else { announce("不正解です。解説を表示します。"); openExplain(a,q,true); }
+  } finally { setTimeout(()=>busy=false, 250); }
+}
+function next(){
+  const a = activeAttempt(db.ui.pattern);
+  if(!a || a.phase!=="answered" || locked()) return;
+  advance(a);
+}
+function acknowledge(a,q){
+  if(a.phase!=="awaiting_ack" || a.order[a.pos]!==q.id || locked()) return;
+  const r = a.answers[q.id]; r.explanationAck = true; r.ackAt = nowISO();
+  a.phase = "answered"; a.updatedAt = nowISO();
+  closeDlg(true);
+  advance(a);
+}
+function advance(a){
+  if(a.pos >= CONFIG.total-1){
+    a.answeredCount = Object.keys(a.answers).length;
+    a.correctCount = Object.values(a.answers).filter(r=>r.correct).length;
+    const st = judge(a.answeredCount, a.correctCount);
+    if(st==="in_progress") return; // 安全策：未回答があれば確定しない
+    a.status = st; a.phase = "done"; a.completedAt = nowISO(); a.updatedAt = a.completedAt;
+    const s = pstate(a.pattern);
+    if(st==="passed" && !s.passedAt){ s.passedAt = a.completedAt; s.passedAttemptId = a.attemptId; }
+    go("result",{pattern:a.pattern, attemptId:a.attemptId});
+    announce(st==="passed"?"合格です":"不合格です");
+  } else {
+    a.pos += 1; a.phase = "answering"; a.updatedAt = nowISO();
+    save(); render(true);
+    announce(`第${a.pos+1}問`);
+  }
+}
+
+/* --- 解説ダイアログ --- */
+const dlg = document.getElementById("dlg");
+let dlgOpener = null;
+function closeDlg(silent){ if(dlg.open) dlg.close(); if(!silent && dlgOpener && document.contains(dlgOpener)) dlgOpener.focus(); }
+document.getElementById("dlg-x").addEventListener("click",()=>closeDlg());
+dlg.addEventListener("cancel",e=>{ e.preventDefault(); closeDlg(); }); // Escでは閉じるだけ（次へ進まない）
+let dlgOpenedAt = 0;
+dlg.addEventListener("click",e=>{ if(e.target===dlg && Date.now()-dlgOpenedAt>700) closeDlg(); }); // 連打で即閉じしない
+function openExplain(a,q,needAck){
+  dlgOpener = document.activeElement;
+  const r = a.answers[q.id];
+  const isLast = a.order.indexOf(q.id) === CONFIG.total-1;
+  const dt = document.getElementById("dlg-title"); dt.classList.toggle("ng-red", !!(r && !r.correct)); dt.textContent = r ? (r.correct ? "正解です｜解説" : "不正解です") : "解説";
+  const b = document.getElementById("dlg-b"); b.replaceChildren(
+    h("p",{class:"muted small"},`${PATTERNS[a.pattern].name} 第${a.order.indexOf(q.id)+1}問`),
+    h("p",{style:"font-weight:700"},q.statement),
+    r ? h("dl",{class:"kv"},h("dt",null,"あなたの回答"),h("dd",null,ansLabel(r.answer)),h("dt",null,"正しい回答"),h("dd",{style:"color:var(--ok)"},ansLabel(q.correctAnswer))) : null,
+    h("div",{class:"sec"},h("h3",null,"解説"),h("p",null,`正解は「${q.correctAnswer?"○":"×"}」です。`,q.explanation)),
+    h("div",{class:"sec pointbox"},h("h3",null,"覚えておきたいポイント"),h("p",null,q.learningPoint)),
+    h("div",{class:"sec"},h("h3",null,"参考資料"),sourceList(q)));
+  const f = document.getElementById("dlg-f");
+  if(needAck && a.phase==="awaiting_ack"){
+    f.replaceChildren(h("button",{class:"btn btn-primary",type:"button",id:"dlg-ack",onclick:()=>acknowledge(a,q)}, isLast?"解説を確認して結果へ":"解説を確認して次へ"));
+  } else {
+    f.replaceChildren(h("button",{class:"btn btn-secondary",type:"button",onclick:()=>closeDlg()},"閉じる"));
+  }
+  b.scrollTop = 0;
+  if(!dlg.open){ dlg.showModal(); dlgOpenedAt = Date.now(); }
+  document.getElementById("dlg-title").setAttribute("tabindex","-1");
+  document.getElementById("dlg-title").focus();
+}
+
+/* --- 結果 --- */
+function vResult(){
+  const p = db.ui.pattern, s = pstate(p);
+  const a = s.attempts.find(x=>x.attemptId===db.ui.attemptId) || completed(p).at(-1);
+  if(!a || a.status==="in_progress"){ db.ui={screen:"patterns"}; return vPatterns(); }
+  const pass = a.status==="passed";
+  const wrong = a.order.filter(id=>!a.answers[id]?.correct).map(id=>QMAP[id]);
+  const b = best(p);
+  const reqLeft = CONFIG.requiredPatterns.filter(x=>!pstate(x).passedAt);
+  const nextP = reqLeft.find(x=>x!==p);
+  const usedSrc = [...new Set(a.order.flatMap(id=>QMAP[id].sources.map(r=>r.src)))];
+  return h("main",{class:"wrap stack"},
+    h("section",{class:"card result-head "+(pass?"pass":"fail")},
+      h("p",{class:"eyebrow"},`${PATTERNS[p].name}｜${PATTERNS[p].theme}`),
+      h("h2",{"data-focus":""},pass?"合格です":"不合格です"),
+      h("p",{class:"score"},a.correctCount,h("small",null," / 20問 正解")),
+      h("p",{style:"font-weight:700"},`正答率 ${pct(a.correctCount)}％`),
+      h("p",null, pass ? "20問中18問以上に正解しました。"
+        : `今回の正答率は${pct(a.correctCount)}％でした。合格には18問以上の正解が必要です。解説を確認し、第1問からもう一度取り組んでください。`)),
+    !pass && !activeAttempt(p) ? h("button",{class:"btn btn-primary",type:"button",onclick:()=>{ startAttempt(p); go("quiz",{pattern:p}); }},"第1問から再挑戦") : null,
+    !pass && activeAttempt(p) ? h("button",{class:"btn btn-primary",type:"button",onclick:()=>go("quiz",{pattern:p})},"再挑戦の続きへ") : null,
+    pass && nextP ? h("button",{class:"btn btn-primary",type:"button",onclick:()=>go("guide",{pattern:nextP})},`次の課題（${PATTERNS[nextP].name}）へ`) : null,
+    h("button",{class:"btn btn-secondary",type:"button",onclick:()=>go("patterns")},"パターン一覧へ"),
+    h("section",{class:"card"},
+      h("dl",{class:"kv"},
+        h("dt",null,"受験回数"),h("dd",null,`第${a.number}回（このパターン通算 ${s.attempts.length}回）`),
+        h("dt",null,"完了日時"),h("dd",null,fmt(a.completedAt)),
+        h("dt",null,"合格実績"),h("dd",null,s.passedAt?`合格済み（${fmt(s.passedAt)}）`:"まだありません"),
+        h("dt",null,"最高結果"),h("dd",null,b?`${b.correctCount}/20問（${pct(b.correctCount)}％）`:"—"),
+        h("dt",null,"解説確認"),h("dd",null,`不正解 ${wrong.length}問の解説を確認済み`))),
+    !pass && s.passedAt ? h("p",{class:"notice small"},"このパターンは以前に合格しています。今回の結果で合格の記録が取り消されることはありません。") : null,
+    h("section",{class:"stack"},
+      h("h3",{style:"font-size:1.05rem"},wrong.length?`間違えた問題の復習（${wrong.length}問）`:"全問正解です"),
+      wrong.length ? h("ol",{class:"review"}, wrong.map(q=>{const r=a.answers[q.id]; return h("li",{class:"stack",style:"gap:8px"},
+        h("p",{class:"qline"},`第${a.order.indexOf(q.id)+1}問　${q.statement}`),
+        h("p",{class:"small"},`あなたの回答：${ansLabel(r.answer)}　→　正しい回答：${ansLabel(q.correctAnswer)}`),
+        h("p",{class:"small"},q.explanation),
+        h("p",{class:"small pointbox"},"ポイント：",q.learningPoint),
+        sourceList(q));})) : null),
+    h("section",{class:"card stack"},h("h3",{style:"font-size:1rem"},"このパターンの参考資料"),
+      h("ul",{class:"srcs"},usedSrc.map(k=>h("li",null,h("a",{href:SOURCES[k].url,target:"_blank",rel:"noopener noreferrer"},SOURCES[k].title+" ↗"),h("span",{class:"pub"},SOURCES[k].publisher))))),
+    h("p",{class:"notice small"},DISCLAIMER));
+}
+
+/* ===== 起動・復元 ===== */
+if(!storageOK){ /* 保存不可でも学習は可能（メモリ上） */ }
+renderSave();
+render(true);
+// 解説確認待ちで再読み込みした場合は解説を再表示
+(function restore(){
+  if(db.ui.screen!=="quiz" || !learner()) return;
+  const a = activeAttempt(db.ui.pattern); if(!a) return;
+  if(a.phase==="awaiting_ack") openExplain(a, QMAP[a.order[a.pos]], true);
+})();
+// 他のタブから戻ったときは最新の保存内容を読み直す
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible" && !dlg.open){ const d=load(); if(d && JSON.stringify(d)!==JSON.stringify(db)){ db=d; render(false);} } });
+window.__test = {judge, CONFIG, QUESTIONS};
+</script>
+
+</body></html>
